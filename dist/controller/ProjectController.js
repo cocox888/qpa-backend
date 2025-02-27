@@ -17,7 +17,7 @@ class ProjectController {
   async getAllProjects(req, res) {
     try {
       const projects = await ProjectService.getAllProjects();
-      console.log(projects);
+      //console.log(projects);
       res.status(200).json(projects);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -37,7 +37,7 @@ class ProjectController {
     try {
       const userinfo = getAuthenticatedUser(req);
       const Projects = await ProjectService.getAllProjectsForUser(userinfo.id);
-      // console.log(Projects);
+      // //console.log(Projects);
       res.status(200).json(Projects);
     } catch (error) {
       res.status(500).json({ message: error.message });

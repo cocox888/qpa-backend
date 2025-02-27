@@ -15,11 +15,11 @@ const UacPermission = (...permissions) => {
   return async (req, res, next) => {
     try {
       const user = getAuthenticatedUser(req);
-      console.log(user);
+      // //console.log(user);
       const role = await Roles.findOne({
         where: { name: user.role // Assuming association is defined
         } });
-      console.log(role.name);
+      // //console.log(role.name);
       if (!role) {
         return res.status(403).json({ message: 'Forbidden!' });
       }
@@ -36,8 +36,8 @@ const UacPermission = (...permissions) => {
       const roles = await ModelRole.findOne({
         where: { model_id: users.id, model_type: model_type }
       });
-      console.log(roles);
-      console.log(user);
+      //console.log(roles);
+      //console.log(user);
       if (user.role_id != roles.role_id) return res.status(403).json({ message: 'Forbidden!' });
       if (user.role != 'admin') {
         const roleMod = await Roles.findByPk(roles.role_id, {

@@ -17,7 +17,7 @@ class TimeTrackService {
       estimated_time,
       title
     } = req;
-    console.log(req);
+    //console.log(req);
     const client = await Client.findByPk(clientId);
     if (!client) throw new Error('Client not found');
     const project = await Project.findByPk(projectId);

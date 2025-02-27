@@ -123,25 +123,16 @@ User.belongsToMany(Project, {
   through: ProjectAssignUser,
   as: 'assignedUserProject'
 });
-//Project-Client associations
-const ClientRequestProject = sequelize.define(
-  'client_projects',
-  {
-    state: {
-      type: DataTypes.STRING,
-      allowNull: true
-    }
-  },
-  { timestamps: false }
-);
-Project.belongsToMany(Client, {
-  through: ClientRequestProject,
-  as: 'requestedProjectClient',
-  onDelete: 'CASCADE'
+
+Project.belongsTo(Client, {
+  foreignKey: 'client_id',
+  as: 'projectClient',
+  onDelete: 'CASCADE',
 });
-Client.belongsToMany(Project, {
-  through: ClientRequestProject,
-  as: 'requestedClientProject'
+
+Client.hasMany(Project, {
+  foreignKey: 'client_id',
+  as: 'clientProject',
 });
 
 //Favorite relation between project and client
@@ -155,15 +146,15 @@ const ClientFavorPro = sequelize.define(
   },
   { timestamps: false }
 );
-Project.belongsToMany(Client, {
-  through: ClientFavorPro,
-  as: 'favoriteClient',
-  onDelete: 'CASCADE'
-});
-Client.belongsToMany(Project, {
-  through: ClientFavorPro,
-  as: 'favoriteProject'
-});
+// Project.belongsToMany(Client, {
+//   through: ClientFavorPro,
+//   as: 'favoriteClient',
+//   onDelete: 'CASCADE'
+// });
+// Client.belongsToMany(Project, {
+//   through: ClientFavorPro,
+//   as: 'favoriteProject'
+// });
 
 //Favorite relation between project and user
 const UserFavorPro = sequelize.define(

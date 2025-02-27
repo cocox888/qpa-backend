@@ -17,12 +17,14 @@ function getAuthenticatedUser(req) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN);
+   
     const user = {
       id: decoded.id,
       email: decoded.email,
       role_id: decoded.role_id,
       role: decoded.role
     };
+   
     return user; // Assuming the JWT contains user data
   } catch (err) {
     return null;

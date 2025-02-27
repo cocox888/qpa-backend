@@ -6,11 +6,11 @@ const ModelRole = require('../../models/ModelRole');
 class UserController {
   async signup(req, res) {
     try {
-      // console.log(req.body);
+      // //console.log(req.body);
       const user = await authUserService.createUser(req);
       //set Role to the User
       const role = req.body.role;
-      console.log(req.body.role);
+      //console.log(req.body.role);
       const role_id = await roleService.getRoleIdByName(role);
       const model_id = user.id;
       const model_type = 'user';

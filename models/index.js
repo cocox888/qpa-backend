@@ -36,7 +36,7 @@ sequelize
 
 // Sync models with the database
 // sequelize.sync({ force: true }) // Use `force: true` only in development for testing
-//   .then(() => console.log('Database synced'))
+//   .then(() => //console.log('Database synced'))
 //   .catch((error) => console.error('Error syncing database:', error));
 
 // module.exports = { User, Client};

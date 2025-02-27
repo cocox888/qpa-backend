@@ -21,7 +21,7 @@ const handleRef = async (req, res, next) => {
       });
     }
 
-    console.log(confirmToken);
+    //console.log(confirmToken);
     if (!confirmToken) {
       reusedRef = jwt.verify(refresh_token, process.env.JWT_REF_TOKEN, async (error, decoded) => {
         if (error) return res.sendStatus(403);

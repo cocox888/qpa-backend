@@ -23,6 +23,7 @@ router.get('/getAllProjects', ProjectController.getAllProjects);
 router.post('/createproject', ProjectController.createProject);
 router.post('/getprojectbyid', ProjectController.getProjectById);
 router.post('/createTask', TaskController.createTask);
+router.post('/updateTaskbyId', TaskController.updateTaskbyId);
 router.delete('/deleteTask', TaskController.deleteTask);
 
 // Time Track Route

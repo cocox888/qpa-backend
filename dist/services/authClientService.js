@@ -80,7 +80,7 @@ class authClientService {
 
   async confClient(data) {
     const { email } = data;
-    console.log(email);
+    //console.log(email);
     // Check if email already exists
     const existingClient = await Client.findOne({ where: { email } });
     if (existingClient) {

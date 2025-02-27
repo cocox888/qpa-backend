@@ -48,7 +48,7 @@ class ProjectService {
       additional_setting,
       portal_access
     });
-    console.log(project);
+    //console.log(project);
     await client.addRequestedClientProject(project);
     const { users } = req;
     users.map(async user => {
@@ -191,7 +191,7 @@ class ProjectService {
 
   //Get all projects with associated users and clients.
   async getAllProjectsForUser(userId) {
-    // console.log(userId);
+    // //console.log(userId);
     const user = await User.findByPk(userId, {
       include: {
         model: Project,
@@ -218,7 +218,7 @@ class ProjectService {
       }
     });
     if (!user) throw new Error('User not found!');
-    console.log(user);
+    //console.log(user);
     return user.assignedUserProject;
   }
 

@@ -38,10 +38,6 @@ Task.init(
       type: DataTypes.STRING,
       allowNull: false
     },
-    created_by: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    }
   },
   {
     sequelize,

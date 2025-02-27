@@ -1,8 +1,8 @@
-const User = require('../../models/User');
-const Client = require('../../models/Client');
-const Project = require('../../models/Project');
-const Tag = require('../../models/Tag');
-const Task = require('../../models/Task');
+const User = require("../../models/User");
+const Client = require("../../models/Client");
+const Project = require("../../models/Project");
+const Tag = require("../../models/Tag");
+const Task = require("../../models/Task");
 
 class TaskService {
   //Create Task
@@ -17,16 +17,19 @@ class TaskService {
       description,
       priority,
       due_date,
-      state
+      estimated_time,
+      state,
     } = req.data;
 
-    if (req.client) {
-      const client = await Client.findOne({ where: { full_name: req.client } });
-      if (!client) throw new Error('Client not found');
-    }
-
-    const project = await Project.findByPk(projectId);
-    if (!project) throw new Error('Project not found');
+    const project = await Project.findByPk(projectId, {
+      include: [
+        {
+          model: Client,
+          as: "projectClient",
+        },
+      ],
+    });
+    if (!project) throw new Error("Project not found");
 
     const task = await Task.create({
       title,
@@ -34,17 +37,18 @@ class TaskService {
       description,
       priority,
       due_date,
-      state
+      estimated_time,
+      state,
     });
-    // await task.setTaskClient(client);
+    await task.setTaskClient(project.projectClient);
     await task.setTaskProject(project);
     if (req.tags && req.tags.length > 0) {
       // Find users by their names (assuming usernames are unique)
       const tags = await Tag.findAll({
-        where: { title: req.tags }
+        where: { title: req.tags },
       });
       if (tags.length !== req.tags.length) {
-        throw new Error('Some tags not found');
+        throw new Error("Some tags not found");
       }
       await task.addAssignedTaskTag(tags);
     }
@@ -52,15 +56,15 @@ class TaskService {
     if (req.members && req.members.length > 0) {
       // Find users by their names (assuming usernames are unique)
       const users = await User.findAll({
-        where: { id: req.members }
+        where: { id: req.members },
       });
       if (users.length !== req.members.length) {
-        throw new Error('Some users not found');
+        throw new Error("Some users not found");
       }
       await task.addAssignedTaskUser(users);
     }
 
-    return { message: 'Task Successfully Created!' };
+    return { message: "Task Successfully Created!" };
   }
 
   //Get all favourite task
@@ -71,21 +75,21 @@ class TaskService {
         include: [
           {
             model: User,
-            as: 'assignedTaskUser'
+            as: "assignedTaskUser",
           },
           {
             model: Client,
-            as: 'taskClient'
+            as: "taskClient",
           },
           {
             model: Tag,
-            as: 'assignedTaskTag'
-          }
+            as: "assignedTaskTag",
+          },
         ],
-        as: 'favoriteUserTask'
-      }
+        as: "favoriteUserTask",
+      },
     });
-    if (!user) throw new Error('User not found!');
+    if (!user) throw new Error("User not found!");
     return user.favoriteUserTask;
   }
 
@@ -96,21 +100,21 @@ class TaskService {
         include: [
           {
             model: User,
-            as: 'assignedTaskUser'
+            as: "assignedTaskUser",
           },
           {
             model: Client,
-            as: 'taskClient'
+            as: "taskClient",
           },
           {
             model: Tag,
-            as: 'assignedTaskTag'
-          }
+            as: "assignedTaskTag",
+          },
         ],
-        as: 'favoriteClientTask'
-      }
+        as: "favoriteClientTask",
+      },
     });
-    if (!user) throw new Error('Client not found!');
+    if (!user) throw new Error("Client not found!");
     return user.favoriteClientTask;
   }
 
@@ -118,27 +122,27 @@ class TaskService {
   async addFavouriteTask(userinfo, taskID) {
     const { email } = userinfo;
     const task = await Task.findByPk(taskID);
-    if (!task) throw new Error('Task Not Found.');
+    if (!task) throw new Error("Task Not Found.");
     const user = await User.findOne({ where: { email } });
     if (user) await user.addFavoriteUserTask(task);
     const client = await Client.findOne({ where: { email } });
     if (client) await client.addFavoriteClientTask(task);
-    if (!client && !user) throw new Error('User Not Found.');
-    return { message: 'Favourite Task Successfully added.' };
+    if (!client && !user) throw new Error("User Not Found.");
+    return { message: "Favourite Task Successfully added." };
   }
 
   async removeFavouriteTask(userinfo, taskID) {
     const { email } = userinfo;
     const task = await Task.findByPk(taskID);
     if (!task) {
-      throw new Error('Task not found.');
+      throw new Error("Task not found.");
     }
     const user = await User.findOne({ where: { email } });
     if (user) await user.removeFavoriteTask(task);
     const client = await Client.findOne({ where: { email } });
     if (client) await user.removeFavoriteTask(task);
-    if (!client && !user) throw new Error('User Not Found.');
-    return { message: 'Task Favour Successfully removed.' };
+    if (!client && !user) throw new Error("User Not Found.");
+    return { message: "Task Favour Successfully removed." };
   }
 
   //Get all tasks with associated users and clients.
@@ -149,25 +153,25 @@ class TaskService {
         include: [
           {
             model: User,
-            as: 'assignedTaskUser'
+            as: "assignedTaskUser",
           },
           {
             model: Client,
-            as: 'requestedTaskClient'
+            as: "requestedTaskClient",
           },
           {
             model: Project,
-            as: 'taskProject'
+            as: "taskProject",
           },
           {
             model: Tag,
-            as: 'assignedTaskTag'
-          }
+            as: "assignedTaskTag",
+          },
         ],
-        as: 'assignedTaskClient'
-      }
+        as: "assignedTaskClient",
+      },
     });
-    if (!user) throw new Error('User not found!');
+    if (!user) throw new Error("User not found!");
     return user.requestedClientProject;
   }
 
@@ -179,21 +183,21 @@ class TaskService {
         include: [
           {
             model: User,
-            as: 'assignedTaskUser'
+            as: "assignedTaskUser",
           },
           {
             model: Client,
-            as: 'taskClient'
+            as: "taskClient",
           },
           {
             model: Project,
-            as: 'taskProject'
-          }
+            as: "taskProject",
+          },
         ],
-        as: 'assignedUserTask'
-      }
+        as: "assignedUserTask",
+      },
     });
-    if (!user) throw new Error('User not found!');
+    if (!user) throw new Error("User not found!");
     return user.assignedUserTask;
   }
 
@@ -203,7 +207,7 @@ class TaskService {
     if (user) return await this.getAllTasksForUser(user.id);
     const client = Client.findOne({ where: { email: email } });
     if (client) return await this.getAllTasksForClient(client.id);
-    if (!user && !client) throw new Error('User not Found!');
+    if (!user && !client) throw new Error("User not Found!");
   }
   //Get all tasks.
   async getAllTasks() {
@@ -211,26 +215,26 @@ class TaskService {
       include: [
         {
           model: Project,
-          as: 'taskProject',
-          attributes: ['id', 'title']
+          as: "taskProject",
+          attributes: ["id", "title"],
         },
         {
           model: Client,
-          as: 'taskClient',
-          attributes: ['id', 'full_name']
+          as: "taskClient",
+          attributes: ["id", "full_name", "business_name"],
         },
         {
           model: User,
-          as: 'assignedTaskUser',
-          attributes: ['id', 'full_name', 'role']
-        }
-      ]
+          as: "assignedTaskUser",
+          attributes: ["id", "full_name", "role"],
+        },
+      ],
     });
   }
 
   async getTasksInProgress() {
     return await Task.findAndCountAll({
-      where: { state: 'inprogress' }
+      where: { state: "inprogress" },
     });
   }
 
@@ -239,23 +243,23 @@ class TaskService {
       include: [
         {
           model: Project,
-          as: 'taskProject'
+          as: "taskProject",
         },
         {
           model: Client,
-          as: 'taskClient'
+          as: "taskClient",
         },
         {
           model: User,
-          as: 'assignedTaskUser'
+          as: "assignedTaskUser",
         },
         {
           model: Tag,
-          as: 'assignedTaskTag'
-        }
-      ]
+          as: "assignedTaskTag",
+        },
+      ],
     });
-    if (!task) throw new Error('Task not found');
+    if (!task) throw new Error("Task not found");
     return task;
   }
 
@@ -266,7 +270,7 @@ class TaskService {
     if (client) {
       const upclient = await Client.findOne({ where: { full_name: client } });
       if (!upclient) {
-        throw new Error('Client not found.');
+        throw new Error("Client not found.");
       }
       // Update the association with Client
       await task.setTaskClient([upclient]);
@@ -276,18 +280,18 @@ class TaskService {
     if (users && users.length > 0) {
       // Find users by their names (assuming usernames are unique)
       const upusers = await User.findAll({
-        where: { full_name: users }
+        where: { full_name: users },
       });
       if (upusers.length !== users.length) {
-        throw new Error('Some users not found');
+        throw new Error("Some users not found");
       }
       if (tags && tags.length > 0) {
         // Find tags by their titles (assuming titles are unique)
         const uptags = await Tag.findAll({
-          where: { title: req.tags }
+          where: { title: req.tags },
         });
         if (uptags.length !== tags.length) {
-          throw new Error('Some tags not found');
+          throw new Error("Some tags not found");
         }
         await Task.setAssignedTaskTag(tags);
       }
@@ -296,14 +300,14 @@ class TaskService {
       await task.setAssignedTaskUser(upusers);
     }
     await task.save();
-    return { message: 'Task updated successfully', task };
+    return { message: "Task updated successfully", task };
   }
 
   async deleteTask(id) {
     const task = await Task.findByPk(id);
 
     if (!task) {
-      throw new Error('Task not found.');
+      throw new Error("Task not found.");
     }
     // await task.setRequestedTaskClient([]);
     // await task.setAssignedUser([]);
@@ -312,7 +316,7 @@ class TaskService {
     // await task.setAssignedTaskTag([]);
     await task.destroy();
 
-    return { message: 'Task and its associations deleted successfully' };
+    return { message: "Task and its associations deleted successfully" };
   }
 
   async getProjectByTag(tagId) {
@@ -322,26 +326,34 @@ class TaskService {
         include: [
           {
             model: User,
-            as: 'assignedTaskUser'
+            as: "assignedTaskUser",
           },
           {
             model: Client,
-            as: 'taskClient'
+            as: "taskClient",
           },
           {
             model: Project,
-            as: 'taskProject'
+            as: "taskProject",
           },
           {
             model: Tag,
-            as: 'assignedTaskTag'
-          }
+            as: "assignedTaskTag",
+          },
         ],
-        as: 'assignedTagTask'
-      }
+        as: "assignedTagTask",
+      },
     });
-    if (!tag) throw new Error('Tag not found!');
+    if (!tag) throw new Error("Tag not found!");
     return tag.setAssignedTagTask;
+  }
+
+  async updateTaskbyId(id, data) {
+    const task = await Task.findByPk(id);
+    await task.update(data);
+
+    if (!task) throw new Error("Task not found!");
+    return task;
   }
 }
 

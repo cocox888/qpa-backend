@@ -6,6 +6,8 @@ const swaggerSpec = require("./swagger");
 const swaggerDocument = require("./swagger-output.json");
 
 require("./models");
+require('./timeManagement');
+
 
 // const authenticateToken = require('./src/middleware/authMiddleware'); // Import authentication middleware
 const auth = require("./src/router/authRouter");
@@ -71,5 +73,5 @@ app.use("/member", roleVerify("member"), vaRouter);
 app.use("/client", roleVerify("client"), clientRouter);
 
 app.listen(PORT, () => {
-  console.log("The server is running at localhost:" + PORT);
+  //console.log("The server is running at localhost:" + PORT);
 });

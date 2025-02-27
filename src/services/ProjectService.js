@@ -46,10 +46,11 @@ class ProjectService {
       project_type,
       technology,
       additional_setting,
-      portal_access
+      portal_access,
+      client_id:client.id
     });
-    console.log(project);
-    await client.addRequestedClientProject(project);
+    //console.log(project);
+    
     const { users } = req;
     users.map(async (user) => {
       const projectVA = await User.findByPk(user);
@@ -206,7 +207,7 @@ class ProjectService {
 
   //Get all projects with associated users and clients.
   async getAllProjectsForUser(userId) {
-    // console.log(userId);
+    // //console.log(userId);
     const user = await User.findByPk(userId, {
       include: {
         model: Project,
@@ -237,7 +238,7 @@ class ProjectService {
       }
     });
     if (!user) throw new Error('User not found!');
-    console.log(user);
+    //console.log(user);
     return user.assignedUserProject;
   }
 
@@ -263,11 +264,8 @@ class ProjectService {
         },
         {
           model: Client,
-          as: 'requestedProjectClient',
+          as: 'projectClient',
           attributes: ['id', 'full_name', 'email'],
-          through: {
-            attributes: []
-          }
         },
         {
           model: Task,
@@ -314,11 +312,9 @@ class ProjectService {
         },
         {
           model: Client,
-          as: 'requestedProjectClient',
+          as: 'projectClient',
           attributes: ['id', 'full_name', 'email'],
-          through: {
-            attributes: []
-          }
+         
         },
         {
           model: Task,
