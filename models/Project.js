@@ -73,6 +73,14 @@ const Project = sequelize.define(
     additional_setting: {
       type: DataTypes.STRING,
       allowNull: true
+    },
+    totalTimeForDay: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    totalTimeForWeek: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   },
   {

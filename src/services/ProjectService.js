@@ -1,9 +1,10 @@
-const User = require('../../models/User');
-const Client = require('../../models/Client');
-const Project = require('../../models/Project');
-const Tag = require('../../models/Tag');
-const Task = require('../../models/Task');
-const { Op } = require('sequelize');
+const User = require("../../models/User");
+const Client = require("../../models/Client");
+const Project = require("../../models/Project");
+const Tag = require("../../models/Tag");
+const Task = require("../../models/Task");
+const { Op } = require("sequelize");
+const { isTimestampToday, isTimestampWithinCurrentWeek } = require("../../utils/Time.cjs");
 
 class ProjectService {
   //Create Project
@@ -26,11 +27,11 @@ class ProjectService {
       project_type,
       technology,
       additional_setting,
-      portal_access
+      portal_access,
     } = req.data;
 
     const client = await Client.findByPk(clientId);
-    if (!client) throw new Error('Client not found!');
+    if (!client) throw new Error("Client not found!");
 
     const project = await Project.create({
       title,
@@ -47,15 +48,15 @@ class ProjectService {
       technology,
       additional_setting,
       portal_access,
-      client_id:client.id
+      client_id: client.id,
     });
     //console.log(project);
-    
+
     const { users } = req;
     users.map(async (user) => {
       const projectVA = await User.findByPk(user);
       // biome-ignore lint/style/useTemplate: <explanation>
-      if (!projectVA) throw new Error('User' + user + 'not found!');
+      if (!projectVA) throw new Error("User" + user + "not found!");
       await projectVA.addAssignedUserProject(project);
     });
     return project;
@@ -68,35 +69,35 @@ class ProjectService {
         include: [
           {
             model: User,
-            as: 'assignedProjectUser',
-            attributes: ['id', 'full_name'],
+            as: "assignedProjectUser",
+            attributes: ["id", "full_name"],
             through: {
-              attributes: []
-            }
+              attributes: [],
+            },
           },
           {
             model: Client,
-            as: 'requestedProjectClient',
-            attributes: ['id', 'full_name'],
+            as: "requestedProjectClient",
+            attributes: ["id", "full_name"],
             through: {
-              attributes: []
-            }
+              attributes: [],
+            },
           },
           {
             model: Task,
-            as: 'projectTask',
-            attributes: ['id', 'title']
+            as: "projectTask",
+            attributes: ["id", "title"],
           },
           {
             model: Tag,
-            as: 'assignedProjectTag',
-            attributes: ['id', 'title']
-          }
+            as: "assignedProjectTag",
+            attributes: ["id", "title"],
+          },
         ],
-        as: 'favoriteProject'
-      }
+        as: "favoriteProject",
+      },
     });
-    if (!user) throw new Error('User not found!');
+    if (!user) throw new Error("User not found!");
     return user.favoriteProject;
   }
 
@@ -107,35 +108,35 @@ class ProjectService {
         include: [
           {
             model: User,
-            as: 'assignedProjectUser',
-            attributes: ['id', 'full_name'],
+            as: "assignedProjectUser",
+            attributes: ["id", "full_name"],
             through: {
-              attributes: []
-            }
+              attributes: [],
+            },
           },
           {
             model: Client,
-            as: 'requestedProjectClient',
-            attributes: ['id', 'full_name'],
+            as: "requestedProjectClient",
+            attributes: ["id", "full_name"],
             through: {
-              attributes: []
-            }
+              attributes: [],
+            },
           },
           {
             model: Task,
-            as: 'projectTask',
-            attributes: ['id', 'title']
+            as: "projectTask",
+            attributes: ["id", "title"],
           },
           {
             model: Tag,
-            as: 'assignedProjectTag',
-            attributes: ['id', 'title']
-          }
+            as: "assignedProjectTag",
+            attributes: ["id", "title"],
+          },
         ],
-        as: 'favoriteProject'
-      }
+        as: "favoriteProject",
+      },
     });
-    if (!user) throw new Error('User not found!');
+    if (!user) throw new Error("User not found!");
     return user.favoriteProject;
   }
 
@@ -147,22 +148,22 @@ class ProjectService {
     if (user) await user.addFavoriteProject(project);
     const client = await Client.findOne({ where: { email } });
     if (client) await client.addFavoriteProject(project);
-    if (!client && !user) throw new Error('User Not Found.');
-    return { message: 'Favourite Project Successfully added.' };
+    if (!client && !user) throw new Error("User Not Found.");
+    return { message: "Favourite Project Successfully added." };
   }
 
   async removeFavouriteProject(userinfo, projectID) {
     const { email } = userinfo;
     const project = await Project.findByPk(projectID);
     if (!project) {
-      throw new Error('Project not found.');
+      throw new Error("Project not found.");
     }
     const user = await User.findOne({ where: { email } });
     if (user) await user.removeFavoriteProject(project);
     const client = await Client.findOne({ where: { email } });
     if (client) await user.removeFavoriteProject(project);
-    if (!client && !user) throw new Error('User Not Found.');
-    return { message: 'Project Favour Successfully removed.' };
+    if (!client && !user) throw new Error("User Not Found.");
+    return { message: "Project Favour Successfully removed." };
   }
 
   //Get all projects with associated users and clients.
@@ -173,35 +174,35 @@ class ProjectService {
         include: [
           {
             model: User,
-            as: 'assignedProjectUser',
-            attributes: ['id', 'full_name'],
+            as: "assignedProjectUser",
+            attributes: ["id", "full_name"],
             through: {
-              attributes: []
-            }
+              attributes: [],
+            },
           },
           {
             model: Client,
-            as: 'requestedProjectClient',
-            attributes: ['id', 'full_name'],
+            as: "requestedProjectClient",
+            attributes: ["id", "full_name"],
             through: {
-              attributes: []
-            }
+              attributes: [],
+            },
           },
           {
             model: Task,
-            as: 'projectTask',
-            attributes: ['id', 'title']
+            as: "projectTask",
+            attributes: ["id", "title"],
           },
           {
             model: Tag,
-            as: 'assignedProjectTag',
-            attributes: ['id', 'title']
-          }
+            as: "assignedProjectTag",
+            attributes: ["id", "title"],
+          },
         ],
-        as: 'requestedClientProject'
-      }
+        as: "requestedClientProject",
+      },
     });
-    if (!user) throw new Error('User not found!');
+    if (!user) throw new Error("User not found!");
     return user.requestedClientProject;
   }
 
@@ -214,30 +215,30 @@ class ProjectService {
         include: [
           {
             model: User,
-            as: 'assignedProjectUser',
-            attributes: ['id', 'full_name'],
+            as: "assignedProjectUser",
+            attributes: ["id", "full_name"],
             through: {
-              attributes: []
-            }
+              attributes: [],
+            },
           },
           {
             model: Client,
-            as: 'requestedProjectClient',
-            attributes: ['id', 'full_name'],
+            as: "requestedProjectClient",
+            attributes: ["id", "full_name"],
             through: {
-              attributes: []
-            }
+              attributes: [],
+            },
           },
           {
             model: Task,
-            as: 'projectTask',
-            attributes: ['id', 'title']
-          }
+            as: "projectTask",
+            attributes: ["id", "title"],
+          },
         ],
-        as: 'assignedUserProject'
-      }
+        as: "assignedUserProject",
+      },
     });
-    if (!user) throw new Error('User not found!');
+    if (!user) throw new Error("User not found!");
     //console.log(user);
     return user.assignedUserProject;
   }
@@ -247,7 +248,7 @@ class ProjectService {
     if (user) return await this.getAllProjectsForUser(user.id);
     const client = await Client.findOne({ where: { email: email } });
     if (client) return await this.getAllProjectsForClient(client.id);
-    if (!user && !client) throw new Error('User not Found!');
+    if (!user && !client) throw new Error("User not Found!");
   }
 
   //Get all projects.
@@ -256,22 +257,22 @@ class ProjectService {
       include: [
         {
           model: User,
-          as: 'assignedProjectUser',
-          attributes: ['id', 'full_name', 'email', 'position'],
+          as: "assignedProjectUser",
+          attributes: ["id", "full_name", "email", "position"],
           through: {
-            attributes: []
-          }
+            attributes: [],
+          },
         },
         {
           model: Client,
-          as: 'projectClient',
-          attributes: ['id', 'full_name', 'email'],
+          as: "projectClient",
+          attributes: ["id", "full_name", "email"],
         },
         {
           model: Task,
-          as: 'projectTask',
-          attributes: ['id', 'title', 'time_spent']
-        }
+          as: "projectTask",
+          attributes: ["id", "title", "time_spent"],
+        },
         // {
         //   model: Tag,
         //   as: 'assignedProjectTag',
@@ -280,21 +281,21 @@ class ProjectService {
         //   //   attributes: [],
         //   // },
         // }
-      ]
+      ],
     });
-    if (!project) throw new Error('Project not found!');
+    if (!project) throw new Error("Project not found!");
     return project;
   }
 
   async activeProjects() {
     const projects = await Project.findAndCountAll({
       where: {
-        state: { [Op.ne]: 'completed' }
-      }
+        state: { [Op.ne]: "completed" },
+      },
     });
 
     if (!projects || projects.length === 0)
-      throw new Error('No active projects found!');
+      throw new Error("No active projects found!");
 
     return projects;
   }
@@ -304,31 +305,30 @@ class ProjectService {
       include: [
         {
           model: User,
-          as: 'assignedProjectUser',
-          attributes: ['id', 'full_name', 'email'],
+          as: "assignedProjectUser",
+          attributes: ["id", "full_name", "email"],
           through: {
-            attributes: []
-          }
+            attributes: [],
+          },
         },
         {
           model: Client,
-          as: 'projectClient',
-          attributes: ['id', 'full_name', 'email'],
-         
+          as: "projectClient",
+          attributes: ["id", "full_name", "email"],
         },
         {
           model: Task,
-          as: 'projectTask',
-          attributes: ['id', 'title']
-        }
+          as: "projectTask",
+          attributes: ["id", "title"],
+        },
         // {
         //   model: Tag,
         //   as: 'assignedProjectTag',
         //   attributes: ['id', 'title']
         // }
-      ]
+      ],
     });
-    if (!project) throw new Error('Project not found');
+    if (!project) throw new Error("Project not found");
     return project;
   }
 
@@ -339,7 +339,7 @@ class ProjectService {
     if (client) {
       const upclient = await Client.findOne({ where: { full_name: client } });
       if (!upclient) {
-        throw new Error('Client not found.');
+        throw new Error("Client not found.");
       }
       // Update the association with Client
       await project.setRequestedProjectClient([upclient]);
@@ -349,18 +349,18 @@ class ProjectService {
     if (users && users.length > 0) {
       // Find users by their names (assuming usernames are unique)
       const upusers = await User.findAll({
-        where: { full_name: users }
+        where: { full_name: users },
       });
       if (upusers.length !== users.length) {
-        throw new Error('Some users not found');
+        throw new Error("Some users not found");
       }
       if (tags && tags.length > 0) {
         // Find tags by their titles (assuming titles are unique)
         const uptags = await Tag.findAll({
-          where: { title: req.tags }
+          where: { title: req.tags },
         });
         if (uptags.length !== tags.length) {
-          throw new Error('Some tags not found');
+          throw new Error("Some tags not found");
         }
         await Project.setAssignedProjectTag(tags);
       }
@@ -369,19 +369,19 @@ class ProjectService {
       await project.setAssignedProjectUser(upusers);
     }
     await project.save();
-    return { message: 'Project updated successfully' };
+    return { message: "Project updated successfully" };
   }
 
   async deleteProject(id) {
     const project = await Project.findByPk(id);
 
     if (!project) {
-      throw new Error('Project not found.');
+      throw new Error("Project not found.");
     }
 
     await project.destroy();
 
-    return { message: 'Project and its associations deleted successfully' };
+    return { message: "Project and its associations deleted successfully" };
   }
 
   async getProjectByTag(tagId) {
@@ -391,42 +391,68 @@ class ProjectService {
         include: [
           {
             model: User,
-            as: 'assignedProjectUser',
-            attributes: ['id', 'full_name'],
+            as: "assignedProjectUser",
+            attributes: ["id", "full_name"],
             through: {
-              attributes: []
-            }
+              attributes: [],
+            },
           },
           {
             model: Client,
-            as: 'requestedProjectClient',
-            attributes: ['id', 'full_name'],
+            as: "requestedProjectClient",
+            attributes: ["id", "full_name"],
             through: {
-              attributes: []
-            }
+              attributes: [],
+            },
           },
           {
             model: Task,
-            as: 'projectTask',
-            attributes: ['id', 'title'],
+            as: "projectTask",
+            attributes: ["id", "title"],
             through: {
-              attributes: []
-            }
+              attributes: [],
+            },
           },
           {
             model: Tag,
-            as: 'assignedProjectTag',
-            attributes: ['id', 'title'],
+            as: "assignedProjectTag",
+            attributes: ["id", "title"],
             through: {
-              attributes: []
-            }
-          }
+              attributes: [],
+            },
+          },
         ],
-        as: 'assignedTagProject'
+        as: "assignedTagProject",
+      },
+    });
+    if (!tag) throw new Error("Tag not found!");
+    return tag.setAssignedTagProject;
+  }
+
+  async getTimeData(data) {
+    const { project_id } = data;
+    const project = await Project.findByPk(project_id, {
+      include: {
+        model: Task,
+        as: "projectTask",
+      },
+    });
+    if (!project) throw new Error("Project not found!");
+    // console.log(project.projectTask);
+
+    let totalTimeForDay = 0;
+    let totalTimeForWeek = 0;
+
+    project.projectTask.map((item, index) => {
+      if(isTimestampToday(item.createdAt)){
+        totalTimeForDay+=item.estimated_time;
+      }
+      if(isTimestampWithinCurrentWeek(item.createdAt)){
+        totalTimeForWeek+=item.estimated_time;
       }
     });
-    if (!tag) throw new Error('Tag not found!');
-    return tag.setAssignedTagProject;
+
+    return {totalTimeForDay, totalTimeForWeek};
   }
 }
 

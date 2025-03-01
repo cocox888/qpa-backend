@@ -22,9 +22,18 @@ router.get('/tasksInProgress', TaskController.getTasksInProgress);
 router.get('/getAllProjects', ProjectController.getAllProjects);
 router.post('/createproject', ProjectController.createProject);
 router.post('/getprojectbyid', ProjectController.getProjectById);
+
+/**
+ * Task Management
+ */
 router.post('/createTask', TaskController.createTask);
 router.post('/updateTaskbyId', TaskController.updateTaskbyId);
 router.delete('/deleteTask', TaskController.deleteTask);
+
+/**
+ * Get Time Data For Project
+ */
+router.post('/getTimeDataForProject', ProjectController.getTimeData);
 
 // Time Track Route
 router.get('/getAllTimeTracks', TimeTrackController.getAllTimeTracksForPeriod);

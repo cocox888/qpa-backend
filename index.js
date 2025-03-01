@@ -5,9 +5,8 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
 const swaggerDocument = require("./swagger-output.json");
 
-require("./models");
-require('./timeManagement');
 
+require("./models");
 
 // const authenticateToken = require('./src/middleware/authMiddleware'); // Import authentication middleware
 const auth = require("./src/router/authRouter");
