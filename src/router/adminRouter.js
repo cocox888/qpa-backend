@@ -38,6 +38,10 @@ router.post('/getTimeDataForProject', ProjectController.getTimeData);
 // Time Track Route
 router.get('/getAllTimeTracks', TimeTrackController.getAllTimeTracksForPeriod);
 
+/**
+ * Project Management
+ */
+router.post('/updateProjectPhase', ProjectController.updateProjectPhase);
 router.get(
   '/allTasks',
   // UacPermission('edit_task', 'delete_tasks'),

@@ -141,7 +141,7 @@ class TaskController {
   async updateTaskbyId(req, res) {
     try {
       const { id, ...data } = req.body.data;
-      console.log("*******" + id);
+      // console.log("*******" + id);
       const tasks = await TaskService.updateTaskbyId(id, data);
       res.status(200).json(tasks);
     } catch (error) {

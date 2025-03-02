@@ -81,6 +81,14 @@ const Project = sequelize.define(
     totalTimeForWeek: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    totalTimeForMonth: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    project_phase:{
+      type:DataTypes.STRING,
+      allowNull:true
     }
   },
   {

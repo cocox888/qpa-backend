@@ -32,4 +32,19 @@ function isTimestampWithinCurrentWeek(timestamp) {
   return isWithinThisWeek;
 }
 
-module.exports = { isTimestampWithinCurrentWeek, isTimestampToday };
+function isWithinCurrentMonth(date) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const startOfMonth = new Date(year, month, 1, 0, 0, 0, 0);
+  const endOfMonth = new Date(year, month + 1, 0, 23, 59, 59, 999);
+  
+  return date >= startOfMonth && date <= endOfMonth;
+}
+
+module.exports = {
+  isTimestampWithinCurrentWeek,
+  isTimestampToday,
+  isWithinCurrentMonth,
+};

@@ -4,7 +4,12 @@ const Project = require("../../models/Project");
 const Tag = require("../../models/Tag");
 const Task = require("../../models/Task");
 const { Op } = require("sequelize");
-const { isTimestampToday, isTimestampWithinCurrentWeek } = require("../../utils/Time.cjs");
+const {
+  isTimestampToday,
+  isTimestampWithinCurrentWeek,
+} = require("../../utils/Time.cjs");
+const { getPhase } = require("../../utils/ProjectUtils.cjs");
+const ActivityLogs = require("../../models/ActivityLogs");
 
 class ProjectService {
   //Create Project
@@ -273,6 +278,10 @@ class ProjectService {
           as: "projectTask",
           attributes: ["id", "title", "time_spent"],
         },
+        {
+          model:ActivityLogs,
+          as: 'projectHasLogs',
+        }
         // {
         //   model: Tag,
         //   as: 'assignedProjectTag',
@@ -444,15 +453,24 @@ class ProjectService {
     let totalTimeForWeek = 0;
 
     project.projectTask.map((item, index) => {
-      if(isTimestampToday(item.createdAt)){
-        totalTimeForDay+=item.estimated_time;
+      if (isTimestampToday(item.createdAt)) {
+        totalTimeForDay += item.estimated_time;
       }
-      if(isTimestampWithinCurrentWeek(item.createdAt)){
-        totalTimeForWeek+=item.estimated_time;
+      if (isTimestampWithinCurrentWeek(item.createdAt)) {
+        totalTimeForWeek += item.estimated_time;
       }
     });
 
-    return {totalTimeForDay, totalTimeForWeek};
+    return { totalTimeForDay, totalTimeForWeek };
+  }
+  async updateProjectPhase(data) {
+    const { projectId, phase } = data;
+
+    const project = await Project.findByPk(projectId);
+    if (!project) throw new Error("Project not found!");
+    const phaseString = getPhase(phase);
+    project.update({ project_phase: phaseString });
+    return phase;
   }
 }
 

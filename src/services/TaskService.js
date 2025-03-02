@@ -3,6 +3,13 @@ const Client = require("../../models/Client");
 const Project = require("../../models/Project");
 const Tag = require("../../models/Tag");
 const Task = require("../../models/Task");
+const {
+  isTimestampToday,
+  isTimestampWithinCurrentWeek,
+  isWithinCurrentMonth,
+} = require("../../utils/Time.cjs");
+const Activity = require("../../models/ActivityLogs");
+const ActivityLogs = require("../../models/ActivityLogs");
 
 class TaskService {
   //Create Task
@@ -19,6 +26,7 @@ class TaskService {
       due_date,
       estimated_time,
       state,
+      user_name,
     } = req.data;
 
     const project = await Project.findByPk(projectId, {
@@ -29,6 +37,7 @@ class TaskService {
         },
       ],
     });
+
     if (!project) throw new Error("Project not found");
 
     const task = await Task.create({
@@ -42,6 +51,61 @@ class TaskService {
     });
     await task.setTaskClient(project.projectClient);
     await task.setTaskProject(project);
+
+    //////////////////////////
+    // Total Time Update    //
+    //////////////////////////
+
+    if (isTimestampToday(task.createdAt)) {
+      try {
+        project.update({
+          totalTimeForDay: estimated_time + project.totalTimeForDay,
+        });
+      } catch (e) {
+        throw new Error("Project Update Failed");
+      }
+    }
+
+    if (isTimestampWithinCurrentWeek(task.createdAt)) {
+      try {
+        project.update({
+          totalTimeForWeek: estimated_time + project.totalTimeForWeek,
+        });
+      } catch (e) {
+        throw new Error("Project Update Failed");
+      }
+    }
+    if (isWithinCurrentMonth(task.createdAt)) {
+      try {
+        project.update({
+          totalTimeForMonth: estimated_time + project.totalTimeForMonth,
+        });
+      } catch (e) {
+        throw new Error("Project Update Failed");
+      }
+    }
+    // console.log(task.createdAt);
+    //////////////////////////
+    // Activity Update      //
+    //////////////////////////
+    try {
+      const activity = await ActivityLogs.create({
+        project_name: project.title,
+        user_name: data.user_name,
+        task_name: task.title,
+        project_type:project.package_type,
+        action_type:"Create",
+        activity_description: "",
+        project_id:project.id,
+        log_hour:estimated_time,
+      });
+      console.log(activity);
+      // await activity.setLogBelongProject(project.id);
+    
+    } catch (e) {
+      throw new Error("Activity Update Failed");
+    }
+
     if (req.tags && req.tags.length > 0) {
       // Find users by their names (assuming usernames are unique)
       const tags = await Tag.findAll({
@@ -350,13 +414,74 @@ class TaskService {
 
   async updateTaskbyId(id, data) {
     const task = await Task.findByPk(id);
+    // console.log("())()()())(" + task);
+    const subTime = task.estimated_time;
+    const addTime = data.estimated_time;
     await task.update(data);
+
+    // console.log("-------------------" + subTime);
+    const project = await Project.findByPk(data.projectId, {
+      include: [
+        {
+          model: Client,
+          as: "projectClient",
+        },
+      ],
+    });
+
+    // console.log(project);
+    if (isTimestampToday(task.createdAt)) {
+      try {
+        project.update({
+          totalTimeForDay: addTime + project.totalTimeForDay - subTime,
+        });
+      } catch (e) {
+        throw new Error("Project Update Failed");
+      }
+    }
+
+    if (isTimestampWithinCurrentWeek(task.createdAt)) {
+      try {
+        project.update({
+          totalTimeForWeek: addTime + project.totalTimeForWeek - subTime,
+        });
+      } catch (e) {
+        throw new Error("Project Update Failed");
+      }
+    }
+
+    if (isWithinCurrentMonth(task.createdAt)) {
+      try {
+        project.update({
+          totalTimeForMonth: addTime + project.totalTimeForMonth - subTime,
+        });
+      } catch (e) {
+        throw new Error("Project Update Failed");
+      }
+    }
+
+    try {
+      const activity = await ActivityLogs.create({
+        project_name: project.title,
+        user_name: data.user_name,
+        task_name: task.title,
+        project_type:project.package_type,
+        action_type:"Update",
+        activity_description: "",
+        project_id:project.id,
+        log_hour:data.estimated_time,
+
+      });
+      console.log(activity);
+      // await activity.setLogBelongProject(project.id);
+    
+    } catch (e) {
+      throw new Error("Activity Update Failed");
+    }
 
     if (!task) throw new Error("Task not found!");
     return task;
   }
-
-  
 }
 
 module.exports = new TaskService();
