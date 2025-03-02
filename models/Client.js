@@ -86,6 +86,9 @@ const Client = sequelize.define(
     start_date: {
       type: DataTypes.STRING
     },
+    priority_tasks: {
+      type: DataTypes.STRING
+    },
     billing_method: {
       type: DataTypes.STRING
     },
@@ -108,6 +111,33 @@ const Client = sequelize.define(
       type: DataTypes.STRING
     },
     sign_date: {
+      type: DataTypes.STRING
+    },
+    agree_to_terms: {
+      type: DataTypes.BOOLEAN
+    },
+    agreementDate: {
+      type: DataTypes.DATE
+    },
+    deadlines: {
+      type: DataTypes.STRING
+    },
+    update_frequency: {
+      type: DataTypes.STRING
+    },
+    stakeholders: {
+      type: DataTypes.STRING
+    },
+    update_method: {
+      type: DataTypes.STRING
+    },
+    hours_needed: {
+      type: DataTypes.INTEGER
+    },
+    tools_to_access: {
+      type: DataTypes.BOOLEAN
+    },
+    need_access: {
       type: DataTypes.STRING
     }
   },

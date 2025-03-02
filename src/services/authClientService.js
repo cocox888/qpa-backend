@@ -6,38 +6,55 @@ class authClientService {
   // Create a new Client
   async createClient(req) {
     const {
-      first_name,
-      last_name,
+      full_name,
       business_name,
-      email,
-      sex,
-      preferred_correspondence_email,
-      preferred_contact_method,
+      personal_address,
       business_address,
-      address_line_1,
-      address_line_2,
-      state_province_region,
-      city,
-      state,
-      company,
+      position,
+      email,
       phone,
-      password,
-      address,
-      country,
-      zip,
-      postal_zip_code,
-      website,
-      prefer_company,
-      dob,
-      doj,
-      signature,
-      agree_terms,
-      agree_update_terms,
-      role
-    } = req.body;
-    // biome-ignore lint/style/useTemplate: <explanation>
-    const full_name = first_name + ' ' + last_name;
-    // Check if email already exists
+      preferred_contact_method,
+      timezone,
+
+      // Step 2: Services & Goals
+      services,
+      other_services,
+      deadlines,
+      hours_needed,
+
+      // Step 3: Tools and Access
+      use_tools,
+      need_access,
+      tools_to_access,
+      file_share_method,
+
+      // Step 4: Communication Preferences
+      update_frequency,
+      update_method,
+      stakeholders,
+
+      // Step 5: Priorities
+      priority_tasks,
+      start_date,
+
+      // Step 6: Billing & Agreements
+      billing_method,
+      billing_cycle,
+      invoice_email,
+
+      // Step 7: Emergency Contact & Agreement
+      emergency_contact_name,
+      emergency_phone,
+      emergency_relationship,
+      digital_sign,
+      agreementDate,
+      agree_to_terms
+    } = req;
+    const first_name = full_name.splice(0);
+    const last_name = full_name.splice(1);
+    const default_services = Object.keys(services)
+      .filter((key) => services[key])
+      .join(', ');
     const existingClient = await Client.findOne({ where: { email } });
     if (existingClient) {
       throw new Error('Email already in use');
@@ -49,31 +66,47 @@ class authClientService {
       last_name,
       full_name,
       business_name,
-      email,
-      sex,
-      preferred_correspondence_email,
-      preferred_contact_method,
+      personal_address,
       business_address,
-      address_line_1,
-      address_line_2,
-      state_province_region,
-      city,
-      state,
-      company,
+      position,
+      email,
       phone,
-      password,
-      address,
-      country,
-      zip,
-      postal_zip_code,
-      website,
-      prefer_company,
-      dob,
-      doj,
-      signature,
-      agree_terms,
-      agree_update_terms,
-      photo,
+      preferred_contact_method,
+      timezone,
+
+      // Step 2: Services & Goals
+      default_services,
+      other_services,
+      deadlines,
+      hours_needed,
+
+      // Step 3: Tools and Access
+      use_tools,
+      need_access,
+      tools_to_access,
+      file_share_method,
+
+      // Step 4: Communication Preferences
+      update_frequency,
+      update_method,
+      stakeholders,
+
+      // Step 5: Priorities
+      priority_tasks,
+      start_date,
+
+      // Step 6: Billing & Agreements
+      billing_method,
+      billing_cycle,
+      invoice_email,
+
+      // Step 7: Emergency Contact & Agreement
+      emergency_contact_name,
+      emergency_phone,
+      emergency_relationship,
+      digital_sign,
+      agreementDate,
+      agree_to_terms,
       status: req.body.status || 0
     });
   }
