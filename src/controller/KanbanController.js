@@ -15,11 +15,19 @@ class KanbanController {
 
   async getAllKanbanTask(req, res) {
     try {
-      const kanbanTasks =await KanbanService.getAllKanbanTask();
-      console.log(kanbanTasks)
-      res
-        .status(201)
-        .json({ message: "Fetch KanbanTasks successfully", kanbanTasks });
+      const kanbanTasks = await KanbanService.getAllKanbanTask();
+      console.log(kanbanTasks);
+      res.status(201).json(kanbanTasks);
+    } catch (e) {
+      res.status(500).json({ message: e.message });
+    }
+  }
+
+  async updateKanbanTaskById(req, res) {
+    try {
+      const kanbanTask = await KanbanService.updateKanbanTaskById(req.body);
+    
+      res.status(201).json(kanbanTask);
     } catch (e) {
       res.status(500).json({ message: e.message });
     }

@@ -18,7 +18,7 @@ const KanbanTasks = sequelize.define(
       allowNull: true,
     },
     due_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     label: {
