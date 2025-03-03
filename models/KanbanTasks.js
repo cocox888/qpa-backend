@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const ActivityLogs = require("./ActivityLogs");
+const User = require("./User");
 
 const KanbanTasks = sequelize.define(
   "KanbanTasks",
@@ -27,7 +27,7 @@ const KanbanTasks = sequelize.define(
     },
 
     status: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: true,
     },
   },
@@ -39,5 +39,16 @@ const KanbanTasks = sequelize.define(
     timestamps: true,
   }
 );
+
+User.hasMany(KanbanTasks, {
+    foreignKey: 'user_id',
+    as:"userHasKanban",
+    onDelete:"CASCADE",
+});
+
+KanbanTasks.belongsTo(User, {
+    foreignKey: 'user_id',
+    as:'kanbanToUser',
+});
 
 module.exports = KanbanTasks;

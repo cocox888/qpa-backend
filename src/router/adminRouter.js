@@ -9,6 +9,7 @@ const TaskController = require('../controller/TaskController');
 const UserController = require('../controller/UserController');
 const ClientController = require('../controller/ClientController');
 const TimeTrackController = require('../controller/TimeTrackController');
+const KanbanController = require('../controller/KanbanController');
 
 //Router for project CRUD action.
 router.post('/', async (req, res) => {
@@ -29,7 +30,8 @@ router.post('/getprojectbyid', ProjectController.getProjectById);
 router.post('/createTask', TaskController.createTask);
 router.post('/updateTaskbyId', TaskController.updateTaskbyId);
 router.delete('/deleteTask', TaskController.deleteTask);
-
+router.post('/createKanbanBoardTask', KanbanController.createKanbanTask);
+router.get('/getAllKanbanTasks', KanbanController.getAllKanbanTask);
 /**
  * Get Time Data For Project
  */
@@ -41,6 +43,7 @@ router.get('/getAllTimeTracks', TimeTrackController.getAllTimeTracksForPeriod);
 /**
  * Project Management
  */
+
 router.post('/updateProjectPhase', ProjectController.updateProjectPhase);
 router.get(
   '/allTasks',

@@ -57,5 +57,6 @@ router.get(
   '/getAllTimeTracksForUser',
   TimeTrackController.getAllTimeTracksForUser
 );
+router.post('/createClient', ClientController.createClient);
 
 module.exports = router;

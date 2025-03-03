@@ -99,8 +99,7 @@ class TaskService {
         project_id:project.id,
         log_hour:estimated_time,
       });
-      console.log(activity);
-      // await activity.setLogBelongProject(project.id);
+  
     
     } catch (e) {
       throw new Error("Activity Update Failed");
@@ -472,8 +471,7 @@ class TaskService {
         log_hour:data.estimated_time,
 
       });
-      console.log(activity);
-      // await activity.setLogBelongProject(project.id);
+
     
     } catch (e) {
       throw new Error("Activity Update Failed");

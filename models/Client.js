@@ -7,15 +7,15 @@ const Client = sequelize.define(
   {
     first_name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     last_name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     full_name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     sex: {
       type: DataTypes.STRING,
@@ -71,7 +71,7 @@ const Client = sequelize.define(
     },
     often: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true
     },
     receive_updates: {
@@ -132,10 +132,10 @@ const Client = sequelize.define(
       type: DataTypes.STRING
     },
     hours_needed: {
-      type: DataTypes.INTEGER
+      type: DataTypes.STRING
     },
     tools_to_access: {
-      type: DataTypes.BOOLEAN
+      type: DataTypes.STRING
     },
     need_access: {
       type: DataTypes.STRING
