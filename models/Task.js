@@ -37,7 +37,7 @@ Task.init(
     state: {
       type: DataTypes.STRING,
       allowNull: false
-    },
+    }
   },
   {
     sequelize,
@@ -134,6 +134,29 @@ Task.belongsToMany(Client, {
 Client.belongsToMany(Task, {
   through: ClientFavorTask,
   as: 'favoriteClientTask',
+  onDelete: 'CASCADE'
+});
+
+const UserClient = sequelize.define(
+  'user_client',
+  {
+    usage_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      allowNull: false
+    }
+  },
+  { timestamps: false }
+);
+
+Client.belongsToMany(User, {
+  through: UserClient,
+  as: 'clientUser',
+  onDelete: 'CASCADE'
+});
+User.belongsToMany(Client, {
+  through: UserClient,
+  as: 'userClient',
   onDelete: 'CASCADE'
 });
 

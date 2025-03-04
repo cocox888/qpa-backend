@@ -32,7 +32,7 @@ router.post('/updateTaskbyId', TaskController.updateTaskbyId);
 router.delete('/deleteTask', TaskController.deleteTask);
 router.post('/createKanbanBoardTask', KanbanController.createKanbanTask);
 router.get('/getAllKanbanTasks', KanbanController.getAllKanbanTask);
-router.post('/updateKanbanTaskById', KanbanController.updateKanbanTaskById)
+router.post('/updateKanbanTaskById', KanbanController.updateKanbanTaskById);
 /**
  * Get Time Data For Project
  */
