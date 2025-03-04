@@ -20,23 +20,35 @@ class KanbanService {
       throw new Error("Kanban Tasks Fetch Failed");
     }
   }
-  async updateKanbanTaskById(data) {
-    const {task_id, updated_status}=data;
-    console.log(data)
+  async updateKanbanTaskStatusById(data) {
+    const { task_id, updated_status } = data;
+    console.log(data);
     try {
       const kanbanTask = await KanbanTasks.findByPk(task_id);
-      if(!kanbanTask){
+      if (!kanbanTask) {
         throw new Error("Kanban Task not founded");
       }
-      await kanbanTask.update({status:updated_status})
+      await kanbanTask.update({ status: updated_status });
       // console.log(kanbanTasks)
       return kanbanTask;
-
     } catch (e) {
       throw new Error("Kanban task status update failed");
     }
   }
 
+  async updateKanbanTaskById(data) {
+    try {
+      const kanbanTask = await KanbanTasks.findByPk(data.id);
+      if (!kanbanTask) {
+        throw new Error("Kanban Task not founded");
+      }
+      await kanbanTask.update(data);
+      // console.log(kanbanTasks)
+      return kanbanTask;
+    } catch (e) {
+      throw new Error("Kanban task update failed");
+    }
+  }
 }
 
 module.exports = new KanbanService();

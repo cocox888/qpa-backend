@@ -23,10 +23,23 @@ class KanbanController {
     }
   }
 
+  async updateKanbanTaskStatusById(req, res) {
+    try {
+      const kanbanTask = await KanbanService.updateKanbanTaskStatusById(
+        req.body
+      );
+
+      res.status(201).json(kanbanTask);
+    } catch (e) {
+      res.status(500).json({ message: e.message });
+    }
+  }
+
   async updateKanbanTaskById(req, res) {
     try {
-      const kanbanTask = await KanbanService.updateKanbanTaskById(req.body);
-    
+      const kanbanTask = await KanbanService.updateKanbanTaskById(
+        req.body
+      );
       res.status(201).json(kanbanTask);
     } catch (e) {
       res.status(500).json({ message: e.message });
