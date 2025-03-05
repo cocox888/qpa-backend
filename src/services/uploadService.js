@@ -1,29 +1,22 @@
-const multer = require("multer");
-const { upload } = require("../../utils/storageSetup");
 const Upload = require("../../models/Upload");
 
 class UploadService {
-  async upload(req, res) {
-    upload(req, res, (err) => {
-      if (err instanceof multer.MulterError) {
-        // A Multer error occurred when uploading
-        res.status(400).send(err.message);
-      } else if (err) {
-        // An unknown error occurred when uploading
-        res.status(400).send(err.message);
-      } else {
-        // File uploaded successfully
-        const upload = updateUploadDatabase()
-        res.send("File uploaded successfully!");
-      }
-    });
+  async createUpload(data) {
+    try{
+      const upload=await Upload.create(data);
+      return upload;
+    }catch(e){
+      throw new Error(e);
+    }
   }
 
-  async updateUploadDatabase(data) {
-    try {
-      const upload = Upload.create(data);
-      return upload;
-    } catch (e) {
+  async getAllUploads(){
+    try{
+      const uploads=await Upload.findAll(
+        
+      );
+      return uploads;
+    }catch(e){
       throw new Error(e);
     }
   }

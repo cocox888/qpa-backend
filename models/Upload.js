@@ -25,12 +25,17 @@ const Upload=sequelize.define(
         },
 
         file_size:{
-            type:DataTypes.STRING,
+            type:DataTypes.INTEGER,
             allowNull:true,
         },
 
         user_id:{
             type:DataTypes.INTEGER,
+            allowNull:true
+        },
+
+        file_path:{
+            type:DataTypes.STRING,
             allowNull:true
         }
     },

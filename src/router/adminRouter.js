@@ -10,6 +10,7 @@ const UserController = require('../controller/UserController');
 const ClientController = require('../controller/ClientController');
 const TimeTrackController = require('../controller/TimeTrackController');
 const KanbanController = require('../controller/KanbanController');
+const DownloadController = require('../controller/DownloadController');
 
 //Router for project CRUD action.
 router.post('/', async (req, res) => {
@@ -34,7 +35,10 @@ router.post('/createKanbanBoardTask', KanbanController.createKanbanTask);
 router.get('/getAllKanbanTasks', KanbanController.getAllKanbanTask);
 router.post('/updateKanbanTaskStatusById', KanbanController.updateKanbanTaskStatusById);
 router.post('/updateKanbanTaskById', KanbanController.updateKanbanTaskById);
-
+/**
+ * Download File Data
+ */
+router.get('/download/:filename', DownloadController.downloadFile);
 /**
  * Team Member Management
  */
