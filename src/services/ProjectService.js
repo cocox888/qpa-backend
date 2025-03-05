@@ -122,7 +122,7 @@ class ProjectService {
           },
           {
             model: Client,
-            as: 'requestedProjectClient',
+            as: 'projectClient',
             attributes: ['id', 'full_name'],
             through: {
               attributes: []
@@ -215,7 +215,7 @@ class ProjectService {
           },
           {
             model: Client,
-            as: 'requestedProjectClient',
+            as: 'projectClient',
             attributes: ['id', 'full_name'],
             through: {
               attributes: []
@@ -250,20 +250,16 @@ class ProjectService {
         {
           model: User,
           as: 'assignedProjectUser',
-          attributes: ['id', 'full_name', 'email', 'position'],
-          through: {
-            attributes: []
-          }
+          attributes: { exclude: ['password'] }
         },
         {
           model: Client,
           as: 'projectClient',
-          attributes: ['id', 'full_name', 'email']
+          attributes: { exclude: ['password'] }
         },
         {
           model: Task,
-          as: 'projectTask',
-          attributes: ['id', 'title', 'time_spent']
+          as: 'projectTask'
         },
         {
           model: ActivityLogs,
