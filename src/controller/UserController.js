@@ -7,16 +7,16 @@ class UserController {
   async signup(req, res) {
     try {
       // //console.log(req.body);
-      const user = await authUserService.createUser(req);
+      const user = await authUserService.createUser(req.body);
       //set Role to the User
-      const role = req.body.role;
-      //console.log(req.body.role);
-      const role_id = await roleService.getRoleIdByName(role);
-      const model_id = user.id;
-      const model_type = 'user';
-      await ModelRole.create({ model_id, model_type, role_id });
+      // const role = req.body.role;
+      // //console.log(req.body.role);
+      // const role_id = await roleService.getRoleIdByName(role);
+      // const model_id = user.id;
+      // const model_type = 'user';
+      // await ModelRole.create({ model_id, model_type, role_id });
 
-      res.status(201).json({ message: 'User created successfully', user });
+      res.status(201).json(user);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }

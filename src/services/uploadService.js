@@ -1,32 +1,32 @@
-const multer = require('multer');
-const path = require('path');
+const multer = require("multer");
+const { upload } = require("../../utils/storageSetup");
+const Upload = require("../../models/Upload");
 
-const fs = require('node:fs');
-const uploadDir = './uploads';
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, '/uploads');
-  },
-  filename: (req, file, cb) => {
-    const originalName = file.originalname;
-    cb(null, Date.now() + path.extname(file.originalname));
+class UploadService {
+  async upload(req, res) {
+    upload(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        // A Multer error occurred when uploading
+        res.status(400).send(err.message);
+      } else if (err) {
+        // An unknown error occurred when uploading
+        res.status(400).send(err.message);
+      } else {
+        // File uploaded successfully
+        const upload = updateUploadDatabase()
+        res.send("File uploaded successfully!");
+      }
+    });
   }
-});
 
-const upload = multer({
-  storage,
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Invalid file type!'), false);
+  async updateUploadDatabase(data) {
+    try {
+      const upload = Upload.create(data);
+      return upload;
+    } catch (e) {
+      throw new Error(e);
     }
   }
-});
+}
 
-module.exports = { upload };
+module.exports = new UploadService();
