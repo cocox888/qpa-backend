@@ -63,15 +63,7 @@ class ProjectService {
       // biome-ignore lint/style/useTemplate: <explanation>
       if (!projectVA) throw new Error('User' + user + 'not found!');
       await projectVA.addAssignedUserProject(project);
-      const [userClientEntry, created] = await UserClient.findOrCreate({
-        where: { user_id: userId, client_id: client.id },
-        defaults: { usage_count: 1 } // Set initial usage_count to 1 if new
-      });
-      if (!created) {
-        // Increment usage_count if relationship already exists
-        userClientEntry.usage_count += 1;
-        await userClientEntry.save();
-      }
+      await client.addClientUser(projectVA);
     });
     return project;
   }
