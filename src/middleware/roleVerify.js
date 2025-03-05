@@ -15,7 +15,7 @@ const roleVerify = (userrole) => {
   return async (req, res, next) => {
     try {
       const user = getAuthenticatedUser(req);
- 
+
       const role = await Roles.findOne({
         where: { name: user.role } // Assuming association is defined
       });
@@ -26,7 +26,7 @@ const roleVerify = (userrole) => {
       let users = await User.findOne({ where: { email: user.email } });
       let model_type = 'user';
       if (!users) {
-        users = Client.findOne({ where: { where: { email: user.email } } });
+        users = await Client.findOne({ where: { email: user.email } });
         model_type = 'client';
       }
       if (!users) {

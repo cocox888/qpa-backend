@@ -11,7 +11,8 @@ const TaskController = require('../controller/TaskController');
 router.post('/', async (req, res) => {
   res.status(200).json('OK');
 });
-router.get('/dashboard', ProjectController.getAllProjectsForClient);
+router.get('/getAllProjects', ProjectController.getAllProjectsForClient);
+router.get('/allTasks', TaskController.getAllTasksForClient);
 
 router.post(
   '/dashboard/getprojectbyid',

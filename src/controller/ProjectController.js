@@ -1,8 +1,8 @@
-const ProjectService = require("../services/ProjectService");
-const roleService = require("../services/roleService");
+const ProjectService = require('../services/ProjectService');
+const roleService = require('../services/roleService');
 
-const { getAuthenticatedUser } = require("../middleware/verifyUser");
-require("../middleware/verifyUser");
+const { getAuthenticatedUser } = require('../middleware/verifyUser');
+require('../middleware/verifyUser');
 
 class ProjectController {
   async createProject(req, res) {
@@ -10,7 +10,7 @@ class ProjectController {
       const Project = await ProjectService.createProject(req.body);
       res
         .status(201)
-        .json({ message: "Project created successfully", Project });
+        .json({ message: 'Project created successfully', Project });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
@@ -39,7 +39,6 @@ class ProjectController {
     try {
       const userinfo = getAuthenticatedUser(req);
       const Projects = await ProjectService.getAllProjectsForUser(userinfo.id);
-      // //console.log(Projects);
       res.status(200).json(Projects);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -52,6 +51,8 @@ class ProjectController {
       const Projects = await ProjectService.getAllProjectsForClient(
         userinfo.id
       );
+      console.log(Projects);
+      console.log('   asfdfdsa');
       res.status(200).json(Projects);
     } catch (error) {
       res.status(500).json({ message: error.message });
@@ -83,7 +84,7 @@ class ProjectController {
         req.query.id,
         req.body
       );
-      res.status(200).json({ message: "Project updated successfully" });
+      res.status(200).json({ message: 'Project updated successfully' });
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
@@ -93,7 +94,7 @@ class ProjectController {
     try {
       const { projectId } = req.query;
       await ProjectService.deleteProject(projectId);
-      res.status(200).json({ message: "Project deleted successfully" });
+      res.status(200).json({ message: 'Project deleted successfully' });
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
@@ -106,9 +107,9 @@ class ProjectController {
       const userinfo = getAuthenticatedUser(req);
       let Projects;
       if (
-        userinfo.role == "admin" ||
-        userinfo.role == "member" ||
-        userinfo.role == "manager"
+        userinfo.role === 'admin' ||
+        userinfo.role === 'member' ||
+        userinfo.role === 'manager'
       ) {
         Projects = await ProjectService.getAllFavouriteProjectForUser(
           userinfo.id
@@ -169,7 +170,6 @@ class ProjectController {
       res.status(500).json({ message: e.message });
     }
   }
-
 }
 
 module.exports = new ProjectController();

@@ -17,26 +17,14 @@ const ModelRole = sequelize.define(
     },
     role_id: {
       type: DataTypes.INTEGER, // BIGINT(20) UNSIGNED
-      allowNull: false, // Ensures this field is required
-      references: {
-        model: 'roles', // Refers to the 'roles' table
-        key: 'id' // Refers to the 'id' column in 'roles'
-      },
-      onDelete: 'CASCADE', // Handles cascading deletion
-      onUpdate: 'CASCADE'
+      allowNull: false // Ensures this field is required
     }
   },
   {
     sequelize,
     modelName: 'ModelRole',
     tableName: 'model_roles', // Explicitly set the table name
-    timestamps: false, // Disable automatic timestamps (since they aren't mentioned)
-    indexes: [
-      {
-        unique: true,
-        fields: ['model_id', 'model_type'] // Ensure unique combinations of model_id and model_type
-      }
-    ]
+    timestamps: false // Disable automatic timestamps (since they aren't mentioned)
   }
 );
 
