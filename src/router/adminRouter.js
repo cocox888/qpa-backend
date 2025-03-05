@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
   res.status(200).json('Admin OK');
 });
 
-router.get('/team', UserController.getAllUsers);
+router.get('/getAllMembers', UserController.getAllUsers);
 router.get('/clients', ClientController.getAllClients);
 router.get('/activeProjects', ProjectController.getActiveProjects);
 router.get('/tasksInProgress', TaskController.getTasksInProgress);
@@ -33,6 +33,11 @@ router.delete('/deleteTask', TaskController.deleteTask);
 router.post('/createKanbanBoardTask', KanbanController.createKanbanTask);
 router.get('/getAllKanbanTasks', KanbanController.getAllKanbanTask);
 router.post('/updateKanbanTaskById', KanbanController.updateKanbanTaskById);
+
+/**
+ * Team Member Management
+ */
+router.post('/createMembers', UserController.signup)
 /**
  * Get Time Data For Project
  */
@@ -44,7 +49,6 @@ router.get('/getAllTimeTracks', TimeTrackController.getAllTimeTracksForPeriod);
 /**
  * Project Management
  */
-
 router.post('/updateProjectPhase', ProjectController.updateProjectPhase);
 router.get(
   '/allTasks',

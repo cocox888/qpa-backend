@@ -51,7 +51,7 @@ class TaskService {
     });
     await task.setTaskClient(project.projectClient);
     await task.setTaskProject(project);
-
+    await task.setAssignedTaskUser(req.members);
     //////////////////////////
     // Total Time Update    //
     //////////////////////////
@@ -84,14 +84,14 @@ class TaskService {
         throw new Error('Project Update Failed');
       }
     }
-    // console.log(task.createdAt);
+ 
     //////////////////////////
     // Activity Update      //
     //////////////////////////
     try {
       const activity = await ActivityLogs.create({
         project_name: project.title,
-        user_name: data.user_name,
+        user_name: user_name,
         task_name: task.title,
         project_type: project.package_type,
         action_type: 'Create',

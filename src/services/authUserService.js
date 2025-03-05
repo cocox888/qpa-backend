@@ -1,53 +1,24 @@
-const User = require('../../models/User');
-const Project = require('../../models/Project');
-const Task = require('../../models/Task');
+const User = require("../../models/User");
+const Project = require("../../models/Project");
+const Task = require("../../models/Task");
 
 class AuthUserService {
-  async createUser(req) {
-    const {
-      first_name,
-      last_name,
-      email,
-      sex,
-      password,
-      phone,
-      address,
-      position,
-      city,
-      state,
-      country,
-      zip_code,
-      dob,
-      role
-    } = req.body;
-    // biome-ignore lint/style/useTemplate: <explanation>
-    const full_name = first_name + ' ' + last_name;
+  async createUser(data) {
+    const { email } = data;
+    console.log(data);
     // Check if email is already in use
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      throw new Error('Email already in use');
+      throw new Error("Email already in use");
     }
-    const avatar = 'uploads/no-image.jpg';
+    const avatar = "uploads/no-image.jpg";
     // Create and return the new user
-    return await User.create({
-      first_name,
-      last_name,
-      full_name,
-      email,
-      sex,
-      password,
-      phone,
-      address,
-      position,
-      city,
-      state,
-      country,
-      zip_code,
-      avatar,
-      dob,
-      role,
-      status: 1
-    });
+    try {
+      const user = await User.create(data);
+      return user;
+    } catch (e) {
+      throw new Error("User Create Failed");
+    }
   }
 
   async findUserByEmail(data) {
@@ -58,13 +29,13 @@ class AuthUserService {
         include: [
           {
             model: Project,
-            as: 'assignedUserProject'
+            as: "assignedUserProject",
           },
           {
             model: Task,
-            as: 'assignedUserTask'
-          }
-        ]
+            as: "assignedUserTask",
+          },
+        ],
       }
     );
   }
@@ -74,15 +45,15 @@ class AuthUserService {
       include: [
         {
           model: Project,
-          as: 'assignedUserProject',
-          attributes: ['id', 'title']
+          as: "assignedUserProject",
+          attributes: ["id", "title"],
         },
         {
           model: Task,
-          as: 'assignedUserTask',
-          attributes: ['id', 'title', 'state']
-        }
-      ]
+          as: "assignedUserTask",
+          attributes: ["id", "title", "state"],
+        },
+      ],
     });
   }
 
@@ -92,18 +63,18 @@ class AuthUserService {
       include: [
         {
           model: Project,
-          as: 'assignedUserProject',
-          attributes: ['id', 'title']
+          as: "assignedUserProject",
+          attributes: ["id", "title"],
         },
         {
           model: Task,
-          as: 'assignedUserTask',
-          attributes: ['id', 'title']
-        }
-      ]
+          as: "assignedUserTask",
+          attributes: ["id", "title"],
+        },
+      ],
     });
     if (!user) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
     return user;
   }
@@ -119,7 +90,7 @@ class AuthUserService {
       try {
         fs.unlinkSync(path.resolve(user.photo));
       } catch (error) {
-        console.error('Error deleting avatar file:', error);
+        console.error("Error deleting avatar file:", error);
       }
     }
     return await user.destroy();
