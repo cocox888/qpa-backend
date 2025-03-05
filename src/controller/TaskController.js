@@ -1,8 +1,8 @@
-const TaskService = require("../services/TaskService");
-const roleService = require("../services/roleService");
+const TaskService = require('../services/TaskService');
+const roleService = require('../services/roleService');
 
-const { getAuthenticatedUser } = require("../middleware/verifyUser");
-require("../middleware/verifyUser");
+const { getAuthenticatedUser } = require('../middleware/verifyUser');
+require('../middleware/verifyUser');
 
 class TaskController {
   //Create Task.
@@ -75,7 +75,7 @@ class TaskController {
       const updatedTask = await TaskService.updateTask(req.query.id, req.body);
       res
         .status(200)
-        .json({ message: "Task updated successfully", Task: updatedTask });
+        .json({ message: 'Task updated successfully', Task: updatedTask });
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
@@ -85,7 +85,7 @@ class TaskController {
     try {
       const { taskId } = req.query;
       await TaskService.deleteTask(taskId);
-      res.status(200).json({ message: "Task deleted successfully" });
+      res.status(200).json({ message: 'Task deleted successfully' });
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
@@ -98,9 +98,9 @@ class TaskController {
       const userinfo = getAuthenticatedUser(req);
       let Tasks;
       if (
-        userinfo.role == "admin" ||
-        userinfo.role == "member" ||
-        userinfo.role == "manager"
+        userinfo.role == 'admin' ||
+        userinfo.role == 'member' ||
+        userinfo.role == 'manager'
       ) {
         Tasks = await TaskService.getAllFavouriteTaskForUser(userinfo.id);
       } else {
@@ -140,9 +140,10 @@ class TaskController {
 
   async updateTaskbyId(req, res) {
     try {
+      const { members } = req.body;
       const { id, ...data } = req.body.data;
       // console.log("*******" + id);
-      const tasks = await TaskService.updateTaskbyId(id, data);
+      const tasks = await TaskService.updateTaskbyId(id, members, data);
       res.status(200).json(tasks);
     } catch (error) {
       res.status(500).json({ message: error.message });

@@ -33,7 +33,6 @@ router.post('/updateTaskbyId', TaskController.updateTaskbyId);
 router.delete('/deleteTask', TaskController.deleteTask);
 router.post('/createKanbanBoardTask', KanbanController.createKanbanTask);
 router.get('/getAllKanbanTasks', KanbanController.getAllKanbanTask);
-router.post('/updateKanbanTaskStatusById', KanbanController.updateKanbanTaskStatusById);
 router.post('/updateKanbanTaskById', KanbanController.updateKanbanTaskById);
 /**
  * Download File Data

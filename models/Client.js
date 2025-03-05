@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const bcrypt = require('bcryptjs');
+const User = require('./User');
 
 const Client = sequelize.define(
   'Client',
@@ -14,6 +15,10 @@ const Client = sequelize.define(
       allowNull: true
     },
     full_name: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    password: {
       type: DataTypes.STRING,
       allowNull: true
     },
@@ -139,6 +144,9 @@ const Client = sequelize.define(
     },
     need_access: {
       type: DataTypes.STRING
+    },
+    ref_token: {
+      type: DataTypes.STRING
     }
   },
   {
@@ -147,19 +155,6 @@ const Client = sequelize.define(
   }
 );
 
-// Associations
-
-// Client.belongsToMany(require('./Meeting'), {
-//   through: 'client_meeting',
-// });
-// Client.belongsToMany(require('./Workspace'), {
-//   through: 'workspace_client',
-// });
-// Client.hasMany(require('./Note'), { foreignKey: 'creator_id' });
-// Client.hasMany(require('./.hidden/Contract'), { foreignKey: 'client_id' });
-// Client.hasMany(require('./Expense'), { foreignKey: 'created_by' });
-// Client.hasMany(require('./Payment'), { foreignKey: 'created_by' });
-// Methods
 Client.prototype.getResult = function () {
   return `${this.first_name} ${this.last_name}`;
 };
