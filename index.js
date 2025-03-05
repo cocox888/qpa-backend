@@ -5,20 +5,20 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger');
 const swaggerDocument = require('./swagger-output.json');
 
-require("./models");
+require('./models');
 
 // const authenticateToken = require('./src/middleware/authMiddleware'); // Import authentication middleware
-const auth = require("./src/router/authRouter");
-const vaRouter = require("./src/router/vaRouter");
-const clientRouter = require("./src/router/clientRouter");
-const adminRouter = require("./src/router/adminRouter");
-const managerRouter = require("./src/router/managerRouter");
-const uploadRouter = require("./src/router/uploadRouter");
-const { handleVerify } = require("./src/middleware/verifyToken");
-const roleVerify = require("./src/middleware/roleVerify");
+const auth = require('./src/router/authRouter');
+const vaRouter = require('./src/router/vaRouter');
+const clientRouter = require('./src/router/clientRouter');
+const adminRouter = require('./src/router/adminRouter');
+const managerRouter = require('./src/router/managerRouter');
+const uploadRouter = require('./src/router/uploadRouter');
+const { handleVerify } = require('./src/middleware/verifyToken');
+const roleVerify = require('./src/middleware/roleVerify');
 
-require('./utils/storageSetup.js')
-require("dotenv").config();
+require('./utils/storageSetup.js');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT;
@@ -54,7 +54,7 @@ app.get('/api/example', (req, res) => {
 });
 
 app.use(auth);
-app.use("/", uploadRouter);
+app.use('/', uploadRouter);
 //Authenticated User Access
 app.use(handleVerify);
 
