@@ -30,6 +30,10 @@ const KanbanTasks = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
   },
   {
     sequelize,
@@ -41,14 +45,14 @@ const KanbanTasks = sequelize.define(
 );
 
 User.hasMany(KanbanTasks, {
-    foreignKey: 'user_id',
-    as:"userHasKanban",
-    onDelete:"CASCADE",
+  foreignKey: "user_id",
+  as: "userHasKanban",
+  onDelete: "CASCADE",
 });
 
 KanbanTasks.belongsTo(User, {
-    foreignKey: 'user_id',
-    as:'kanbanToUser',
+  foreignKey: "user_id",
+  as: "kanbanToUser",
 });
 
 module.exports = KanbanTasks;

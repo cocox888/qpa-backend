@@ -49,6 +49,11 @@ class KanbanService {
       throw new Error("Kanban task update failed");
     }
   }
+
+  async deleteTaskById(id) {
+    const kanbanTask = await KanbanTasks.findByPk(id);
+    kanbanTask.update({ deleted: true });
+  }
 }
 
 module.exports = new KanbanService();
