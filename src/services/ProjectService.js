@@ -8,7 +8,10 @@ const {
   isTimestampToday,
   isTimestampWithinCurrentWeek
 } = require('../../utils/Time.cjs');
-const { getPhaseForSMM, getPhaseStringForProject } = require('../../utils/ProjectUtils.cjs');
+const {
+  getPhaseForSMM,
+  getPhaseStringForProject
+} = require('../../utils/ProjectUtils.cjs');
 const ActivityLogs = require('../../models/ActivityLogs');
 
 class ProjectService {
@@ -55,10 +58,10 @@ class ProjectService {
       additional_setting,
       portal_access,
       client_id: client.id,
-      totalTimeForMonth:0,
-      totalTimeForDay:0,
-      totalTimeForWeek:0,
-      project_phase,
+      totalTimeForMonth: 0,
+      totalTimeForDay: 0,
+      totalTimeForWeek: 0,
+      project_phase
     });
     //console.log(project);
 
@@ -205,7 +208,6 @@ class ProjectService {
 
   //Get all projects with associated users and clients.
   async getAllProjectsForUser(userId) {
-    // //console.log(userId);
     const user = await User.findByPk(userId, {
       include: {
         model: Project,
@@ -213,30 +215,23 @@ class ProjectService {
           {
             model: User,
             as: 'assignedProjectUser',
-            attributes: ['id', 'full_name'],
-            through: {
-              attributes: []
-            }
+            attributes: { exclude: ['password'] }
           },
           {
             model: Client,
             as: 'projectClient',
-            attributes: ['id', 'full_name'],
-            through: {
-              attributes: []
-            }
+            attributes: { exclude: ['password'] }
           },
           {
             model: Task,
-            as: 'projectTask',
-            attributes: ['id', 'title']
+            as: 'projectTask'
           }
         ],
         as: 'assignedUserProject'
       }
     });
     if (!user) throw new Error('User not found!');
-    //console.log(user);
+
     return user.assignedUserProject;
   }
 
