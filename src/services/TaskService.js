@@ -251,11 +251,11 @@ class TaskService {
             as: 'taskProject'
           }
         ],
-        as: 'assignedTaskUser'
+        as: 'assignedUserTask'
       }
     });
     if (!user) throw new Error('User not found!');
-    return user.assignedTaskUser;
+    return user.assignedUserTask;
   }
 
   //Get all tasks By Id
