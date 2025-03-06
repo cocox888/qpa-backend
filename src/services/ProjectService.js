@@ -8,7 +8,7 @@ const {
   isTimestampToday,
   isTimestampWithinCurrentWeek
 } = require('../../utils/Time.cjs');
-const { getPhase } = require('../../utils/ProjectUtils.cjs');
+const { getPhaseForSMM, getPhaseStringForProject } = require('../../utils/ProjectUtils.cjs');
 const ActivityLogs = require('../../models/ActivityLogs');
 
 class ProjectService {
@@ -38,6 +38,7 @@ class ProjectService {
     const client = await Client.findByPk(clientId);
     if (!client) throw new Error('Client not found!');
 
+    const project_phase = getPhaseStringForProject(package_type);
     const project = await Project.create({
       title,
       package_type,
@@ -53,7 +54,11 @@ class ProjectService {
       technology,
       additional_setting,
       portal_access,
-      client_id: client.id
+      client_id: client.id,
+      totalTimeForMonth:0,
+      totalTimeForDay:0,
+      totalTimeForWeek:0,
+      project_phase,
     });
     //console.log(project);
 
@@ -443,7 +448,7 @@ class ProjectService {
 
     const project = await Project.findByPk(projectId);
     if (!project) throw new Error('Project not found!');
-    const phaseString = getPhase(phase);
+    const phaseString = getPhaseForSMM(phase);
     project.update({ project_phase: phaseString });
     return phase;
   }

@@ -55,6 +55,16 @@ class KanbanController {
       res.status(500).json({ message: e.message });
     }
   }
+
+  async deleteTaskById(req, res) {
+    try {
+      const taskId = parseInt(req.params.id, 10);
+      const kanbanTask = await KanbanService.deleteTaskById(taskId);
+      res.status(201).json(kanbanTask);
+    } catch (e) {
+      res.status(500).json({ message: e.message });
+    }
+  }
 }
 
 module.exports = new KanbanController();

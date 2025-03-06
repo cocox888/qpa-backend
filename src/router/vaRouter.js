@@ -26,7 +26,7 @@ router.get('/activeProjects', ProjectController.getActiveProjects);
 router.get('/tasksInProgress', TaskController.getTasksInProgress);
 router.get('/getAllProjects', ProjectController.getAllProjectsForUser);
 router.post('/getprojectbyid', ProjectController.getProjectById);
-
+router.delete('/kanbanTask/:id', KanbanController.deleteTaskById);
 /**
  * Task Management
  */

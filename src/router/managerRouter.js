@@ -11,7 +11,7 @@ const ClientController = require('../controller/ClientController');
 const TimeTrackController = require('../controller/TimeTrackController');
 const KanbanController = require('../controller/KanbanController');
 const DownloadController = require('../controller/DownloadController');
-
+router.delete('/kanbanTask/:id', KanbanController.deleteTaskById);
 //Router for project CRUD action.
 router.post('/', async (req, res) => {
   res.status(200).json('OK');

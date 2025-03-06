@@ -31,10 +31,14 @@ router.post('/getprojectbyid', ProjectController.getProjectById);
 router.post('/createTask', TaskController.createTask);
 router.post('/updateTaskbyId', TaskController.updateTaskbyId);
 router.delete('/deleteTask', TaskController.deleteTask);
+/**
+ * Kanban Task Management
+ */
 router.post('/createKanbanBoardTask', KanbanController.createKanbanTask);
 router.get('/getAllKanbanTasks', KanbanController.getAllKanbanTask);
 router.post('/updateKanbanTaskById', KanbanController.updateKanbanTaskById);
 router.post('/updateKanbanTaskStatusById', KanbanController.updateKanbanTaskStatusById)
+router.delete('/kanbanTask/:id',KanbanController.deleteTaskById);
 /**
  * Download File Data
  */
