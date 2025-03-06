@@ -1,5 +1,6 @@
-const { where } = require("sequelize");
-const KanbanTasks = require("../../models/KanbanTasks");
+const { where } = require('sequelize');
+const KanbanTasks = require('../../models/KanbanTasks');
+const User = require('../../models/User');
 
 class KanbanService {
   async createKanbanTask(data) {
@@ -7,7 +8,7 @@ class KanbanService {
       const kanbanTask = await KanbanTasks.create(data);
       return kanbanTask;
     } catch (e) {
-      throw new Error("Kanban Task not created");
+      throw new Error('Kanban Task not created');
     }
   }
 
@@ -17,22 +18,39 @@ class KanbanService {
       // console.log(kanbanTasks)
       return kanbanTasks;
     } catch (e) {
-      throw new Error("Kanban Tasks Fetch Failed");
+      throw new Error('Kanban Tasks Fetch Failed');
     }
   }
+
+  async getAllKanbanTaskForUser(id) {
+    try {
+      const user = await User.findByPk(id, {
+        include: [
+          {
+            model: KanbanTasks,
+            as: 'userHasKanban'
+          }
+        ]
+      });
+      return user.userHasKanban;
+    } catch (e) {
+      throw new Error('Kanban Tasks Fetch Failed');
+    }
+  }
+
   async updateKanbanTaskStatusById(data) {
     const { task_id, updated_status } = data;
     console.log(data);
     try {
       const kanbanTask = await KanbanTasks.findByPk(task_id);
       if (!kanbanTask) {
-        throw new Error("Kanban Task not founded");
+        throw new Error('Kanban Task not founded');
       }
       await kanbanTask.update({ status: updated_status });
       // console.log(kanbanTasks)
       return kanbanTask;
     } catch (e) {
-      throw new Error("Kanban task status update failed");
+      throw new Error('Kanban task status update failed');
     }
   }
 
@@ -40,13 +58,13 @@ class KanbanService {
     try {
       const kanbanTask = await KanbanTasks.findByPk(data.id);
       if (!kanbanTask) {
-        throw new Error("Kanban Task not founded");
+        throw new Error('Kanban Task not founded');
       }
       await kanbanTask.update(data);
       // console.log(kanbanTasks)
       return kanbanTask;
     } catch (e) {
-      throw new Error("Kanban task update failed");
+      throw new Error('Kanban task update failed');
     }
   }
 

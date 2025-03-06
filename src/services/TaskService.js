@@ -84,7 +84,7 @@ class TaskService {
         throw new Error('Project Update Failed');
       }
     }
- 
+
     //////////////////////////
     // Activity Update      //
     //////////////////////////
@@ -223,10 +223,6 @@ class TaskService {
           {
             model: Project,
             as: 'taskProject'
-          },
-          {
-            model: Tag,
-            as: 'assignedTaskTag'
           }
         ],
         as: 'clientTask'
