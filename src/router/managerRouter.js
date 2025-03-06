@@ -22,7 +22,6 @@ router.get('/clients', ClientController.getAllClients);
 router.get('/activeProjects', ProjectController.getActiveProjects);
 router.get('/tasksInProgress', TaskController.getTasksInProgress);
 router.get('/getAllProjects', ProjectController.getAllProjects);
-router.post('/createproject', ProjectController.createProject);
 router.post('/getprojectbyid', ProjectController.getProjectById);
 
 /**
