@@ -84,7 +84,7 @@ class TaskService {
         throw new Error('Project Update Failed');
       }
     }
- 
+
     //////////////////////////
     // Activity Update      //
     //////////////////////////
@@ -223,10 +223,6 @@ class TaskService {
           {
             model: Project,
             as: 'taskProject'
-          },
-          {
-            model: Tag,
-            as: 'assignedTaskTag'
           }
         ],
         as: 'clientTask'
@@ -255,11 +251,11 @@ class TaskService {
             as: 'taskProject'
           }
         ],
-        as: 'assignedUserTask'
+        as: 'assignedTaskUser'
       }
     });
     if (!user) throw new Error('User not found!');
-    return user.assignedUserTask;
+    return user.assignedTaskUser;
   }
 
   //Get all tasks By Id

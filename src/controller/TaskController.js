@@ -98,9 +98,9 @@ class TaskController {
       const userinfo = getAuthenticatedUser(req);
       let Tasks;
       if (
-        userinfo.role == 'admin' ||
-        userinfo.role == 'member' ||
-        userinfo.role == 'manager'
+        userinfo.role === 'admin' ||
+        userinfo.role === 'member' ||
+        userinfo.role === 'manager'
       ) {
         Tasks = await TaskService.getAllFavouriteTaskForUser(userinfo.id);
       } else {
