@@ -43,8 +43,34 @@ function isWithinCurrentMonth(date) {
   return date >= startOfMonth && date <= endOfMonth;
 }
 
+const getDateRanges = () => {
+  const now = new Date();
+
+  // Today
+  const startOfToday = new Date(now.setHours(0, 0, 0, 0));
+  const endOfToday = new Date(now.setHours(23, 59, 59, 999));
+
+  // Start of the Week (Sunday - Saturday)
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay());
+  startOfWeek.setHours(0, 0, 0, 0);
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+  endOfWeek.setHours(23, 59, 59, 999);
+
+  // Start of the Month
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+  return { startOfToday, endOfToday, startOfWeek, endOfWeek, startOfMonth, endOfMonth };
+};
+
+
 module.exports = {
   isTimestampWithinCurrentWeek,
   isTimestampToday,
   isWithinCurrentMonth,
+  getDateRanges,
 };
+
