@@ -1,64 +1,76 @@
-const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../config/database"); // Adjust path as needed
-const Project = require("./Project");
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/database'); // Adjust path as needed
+const Project = require('./Project');
+const User = require('./User');
 
 const ActivityLogs = sequelize.define(
-  "ActivityLogs",
+  'ActivityLogs',
   {
     project_type: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true
     },
     log_phase: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true
     },
 
     log_hour: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: true
     },
 
     action_type: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true
     },
 
     project_name: {
       type: DataTypes.STRING, // Changed from INTEGER to STRING
-      allowNull: true,
+      allowNull: true
     },
     user_name: {
       type: DataTypes.STRING, // Changed from INTEGER to STRING
-      allowNull: true,
+      allowNull: true
     },
     task_name: {
       type: DataTypes.STRING, // Changed from INTEGER to STRING
-      allowNull: true,
+      allowNull: true
     },
     activity_description: {
       type: DataTypes.STRING,
-      allowNull: true,
-    },
+      allowNull: true
+    }
   },
   {
     sequelize,
-    modelName: "ActivityLogs",
-    tableName: "activity_logs",
+    modelName: 'ActivityLogs',
+    tableName: 'activity_logs',
     underscored: true,
-    timestamps: true, // Enables createdAt & updatedAt fields
+    timestamps: true // Enables createdAt & updatedAt fields
   }
 );
 
 Project.hasMany(ActivityLogs, {
-  foreignKey: "project_id",
-  as: "projectHasLogs",
-  onDelete: "CASCADE",
+  foreignKey: 'project_id',
+  as: 'projectHasLogs',
+  onDelete: 'CASCADE'
 });
 
 ActivityLogs.belongsTo(Project, {
-  foreignKey: "project_id",
-  as: "logBelongProject",
+  foreignKey: 'project_id',
+  as: 'logBelongProject'
+});
+
+ActivityLogs.belongsTo(User, {
+  foreignKey: 'user_id',
+  as: 'activity_user'
+});
+
+User.hasMany(ActivityLogs, {
+  foreignKey: 'user_id',
+  as: 'user_activity',
+  onDelete: 'CASCADE'
 });
 
 module.exports = ActivityLogs;

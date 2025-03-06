@@ -11,6 +11,7 @@ const ClientController = require('../controller/ClientController');
 const TimeTrackController = require('../controller/TimeTrackController');
 const KanbanController = require('../controller/KanbanController');
 const DownloadController = require('../controller/DownloadController');
+const ActivityController = require('../controller/ActivityController');
 
 //Router for project CRUD action.
 router.post('/', async (req, res) => {
@@ -60,5 +61,7 @@ router.get('/getAllTimeTracks', TimeTrackController.getAllTimeTracksForPeriod);
  * Project Management
  */
 router.post('/updateProjectPhase', ProjectController.updateProjectPhase);
+
+router.post('/allActivityLogs', ActivityController.getAllActivityLogs);
 
 module.exports = router;
