@@ -7,6 +7,9 @@ const ProjectController = require('../controller/ProjectController');
 const UacPermission = require('../middleware/UacMiddleware');
 const TaskController = require('../controller/TaskController');
 
+const DownloadController = require('../controller/DownloadController');
+const ActivityController = require('../controller/ActivityController');
+
 //Router for project CRUD action.
 router.post('/', async (req, res) => {
   res.status(200).json('OK');
@@ -19,6 +22,11 @@ router.post(
   UacPermission('edit_task', 'delete_tasks'),
   ProjectController.getProjectById
 );
+
+/**
+ * Download File Data
+ */
+router.get('/download/:filename', DownloadController.downloadFile);
 
 //Router for favourite Project action
 router.post(
