@@ -12,6 +12,7 @@ const TimeTrackController = require('../controller/TimeTrackController');
 const KanbanController = require('../controller/KanbanController');
 const DownloadController = require('../controller/DownloadController');
 const ActivityController = require('../controller/ActivityController');
+
 router.delete('/kanbanTask/:id', KanbanController.deleteTaskById);
 //Router for project CRUD action.
 router.post('/', async (req, res) => {
@@ -38,6 +39,12 @@ router.post(
   '/updateKanbanTaskStatusById',
   KanbanController.updateKanbanTaskStatusById
 );
+
+/**
+ * Download File Data
+ */
+router.get('/download/:filename', DownloadController.downloadFile);
+
 /**
  * Download File Data
  */

@@ -64,4 +64,9 @@ router.post('/updateProjectPhase', ProjectController.updateProjectPhase);
 
 router.post('/allActivityLogs', ActivityController.getAllActivityLogs);
 
+/**
+ * Download File Data
+ */
+router.get('/download/:filename', DownloadController.downloadFile);
+
 module.exports = router;
