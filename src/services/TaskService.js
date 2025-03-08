@@ -26,7 +26,7 @@ class TaskService {
       due_date,
       estimated_time,
       state,
-      user_name
+      user_name,
     } = req.data;
 
     const project = await Project.findByPk(projectId, {
@@ -88,20 +88,6 @@ class TaskService {
     //////////////////////////
     // Activity Update      //
     //////////////////////////
-    try {
-      const activity = await ActivityLogs.create({
-        project_name: project.title,
-        user_name: user_name,
-        task_name: task.title,
-        project_type: project.package_type,
-        action_type: 'Create',
-        activity_description: '',
-        project_id: project.id,
-        log_hour: estimated_time
-      });
-    } catch (e) {
-      throw new Error('Activity Update Failed');
-    }
 
     if (req.tags && req.tags.length > 0) {
       // Find users by their names (assuming usernames are unique)
