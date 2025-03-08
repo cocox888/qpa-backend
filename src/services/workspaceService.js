@@ -1,8 +1,6 @@
-// services/workspaceService.js
 const Workspace = require('../models/Workspace'); // Adjust path if needed
 const User = require('../models/User'); // Adjust path if needed
 
-// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 class WorkspaceService {
   // Create a new workspace
   static async createWorkspace(data) {

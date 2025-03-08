@@ -12,10 +12,6 @@ const Activity = require('../../models/ActivityLogs');
 const ActivityLogs = require('../../models/ActivityLogs');
 
 class TaskService {
-  //Create Task
-  //Fundatmentally this role is only for admin and task manager.
-  //To create Task we need client name, user name
-  //Create the association between task and client and user
   async createTask(req) {
     const {
       title,
@@ -26,7 +22,7 @@ class TaskService {
       due_date,
       estimated_time,
       state,
-      user_name,
+      user_name
     } = req.data;
 
     const project = await Project.findByPk(projectId, {
@@ -52,9 +48,6 @@ class TaskService {
     await task.setTaskClient(project.projectClient);
     await task.setTaskProject(project);
     await task.setAssignedTaskUser(req.members);
-    //////////////////////////
-    // Total Time Update    //
-    //////////////////////////
 
     if (isTimestampToday(task.createdAt)) {
       try {
@@ -84,10 +77,6 @@ class TaskService {
         throw new Error('Project Update Failed');
       }
     }
-
-    //////////////////////////
-    // Activity Update      //
-    //////////////////////////
 
     if (req.tags && req.tags.length > 0) {
       // Find users by their names (assuming usernames are unique)
