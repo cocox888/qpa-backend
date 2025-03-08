@@ -59,19 +59,10 @@ router.post('/getTimeDataForProject', ProjectController.getTimeData);
 // Time Track Route
 router.get('/getAllTimeTracks', TimeTrackController.getAllTimeTracksForPeriod);
 
-/**
- * Project Management
- */
 router.post('/updateProjectPhase', ProjectController.updateProjectPhase);
-/**
- * All Activity Logs
- */
+
 router.post('/allActivityLogs', ActivityController.getAllActivityLogs);
 
-router.get(
-  '/allTasks',
-  // UacPermission('edit_task', 'delete_tasks'),
-  TaskController.getAllTasks
-);
+router.get('/allTasks', TaskController.getAllTasks);
 
 module.exports = router;
