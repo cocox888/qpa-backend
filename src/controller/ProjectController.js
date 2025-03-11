@@ -51,8 +51,17 @@ class ProjectController {
       const Projects = await ProjectService.getAllProjectsForClient(
         userinfo.id
       );
-      console.log(Projects);
-      console.log('   asfdfdsa');
+      res.status(200).json(Projects);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async getAllProjectsForClientById(req, res) {
+    try {
+      const Projects = await ProjectService.getAllProjectsForClient(
+        req.body.client
+      );
       res.status(200).json(Projects);
     } catch (error) {
       res.status(500).json({ message: error.message });
