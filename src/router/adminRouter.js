@@ -13,6 +13,7 @@ const KanbanController = require('../controller/KanbanController');
 const DownloadController = require('../controller/DownloadController');
 const ActivityController = require('../controller/ActivityController');
 const ReportController = require('../controller/ReportController');
+const StripeController = require('../controller/StripeController');
 
 //Router for project CRUD action.
 router.post('/', async (req, res) => {
@@ -24,6 +25,10 @@ router.get('/clients', ClientController.getAllClients);
 router.get('/activeProjects', ProjectController.getActiveProjects);
 router.get('/tasksInProgress', TaskController.getTasksInProgress);
 router.get('/getAllProjects', ProjectController.getAllProjects);
+router.post(
+  '/getAllProjectsForClient',
+  ProjectController.getAllProjectsForClientById
+);
 router.post('/createproject', ProjectController.createProject);
 router.post('/getprojectbyid', ProjectController.getProjectById);
 
@@ -66,8 +71,13 @@ router.post('/allActivityLogs', ActivityController.getAllActivityLogs);
 
 router.get('/allTasks', TaskController.getAllTasks);
 
+//Financial Reports
 router.post('/newreport', ReportController.generateReport);
 router.post('/sendReport', ReportController.sendReport);
 router.get('/getAllReports', ReportController.getAllReports);
+
+//Invoice
+router.post('/newInvoice', StripeController.sendInvoice);
+router.get('/getAllInvoice', StripeController.getInvoices);
 
 module.exports = router;

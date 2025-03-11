@@ -38,6 +38,27 @@ const PORT = process.env.PORT;
 
 // app.use(cors(corsOptions));
 
+const cron = require('node-cron');
+const resetProjectTimes = require('./src/services/ProjectTimeLineService'); // Import function
+
+// Run daily at midnight (00:00)
+cron.schedule('0 0 * * *', async () => {
+  console.log('Running daily project time reset...');
+  await resetProjectTimes();
+});
+
+// Run weekly at midnight on Monday (00:00 Monday)
+cron.schedule('0 0 * * 1', async () => {
+  console.log('Running weekly project time reset...');
+  await resetProjectTimes();
+});
+
+// Run monthly at midnight on the 1st day of the month (00:00)
+cron.schedule('0 0 1 * *', async () => {
+  console.log('Running monthly project time reset...');
+  await resetProjectTimes();
+});
+
 app.use(
   cors({
     credentials: true
