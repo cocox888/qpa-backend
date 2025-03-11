@@ -2,6 +2,9 @@ const { roundToNearestHours } = require('date-fns');
 const Client = require('../../models/Client');
 const Project = require('../../models/Project');
 const Task = require('../../models/Task');
+const Stripe = require('stripe');
+const sendEmail = require('./sendEmail');
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 class authClientService {
   // Create a new Client
@@ -65,6 +68,35 @@ class authClientService {
     const photo = req.file ? req.file.path : '/src/avatars/no-image.jpg';
     // Create and return new client
     try {
+      const stripeAccount = await stripe.accounts.create({
+        country: 'US',
+        email,
+        controller: {
+          fees: {
+            payer: 'application'
+          },
+          losses: {
+            payments: 'application'
+          },
+          stripe_dashboard: {
+            type: 'express'
+          }
+        }
+      });
+
+      const accountLink = await stripe.accountLinks.create({
+        account: stripeAccount.id,
+        refresh_url: `${process.env.PUBLIC_URL}/reauth`,
+        return_url: `${process.env.PUBLIC_URL}/dashboard`,
+        type: 'account_onboarding'
+      });
+
+      // await sendEmail({
+      //   to: email,
+      //   subject: 'Complete Your Stripe Onboarding',
+      //   text: `Click the link to complete your Stripe setup: ${accountLink.url}`
+      // });
+
       const client = await Client.create({
         first_name,
         last_name,
@@ -112,8 +144,14 @@ class authClientService {
         agreementDate,
         agree_to_terms,
         password,
+        stripe_account_id: stripeAccount.id,
+        stripe_account_link: accountLink.url,
         status: req.body.status || 0
       });
+
+      client.setDataValue('accountLink', accountLink.url);
+      client.setDataValue('stripeAccountId', stripeAccount.id);
+
       return client;
     } catch (e) {
       throw new Error(e);

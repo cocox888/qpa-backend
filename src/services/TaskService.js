@@ -435,20 +435,19 @@ class TaskService {
         throw new Error('Project Update Failed');
       }
     }
-
-    try {
+    for (const user of upusers) {
       const activity = await ActivityLogs.create({
         project_name: project.title,
-        user_name: data.user_name,
+        createdby: user_name,
+        user_name: user.name,
         task_name: task.title,
         project_type: project.package_type,
         action_type: 'Update',
-        activity_description: '',
-        project_id: project.id,
+        project_id: project.id, // Link activity to the project
+        user_id: user.id,
+        activity_description: `${user.name} was assigned to the task`,
         log_hour: data.estimated_time
       });
-    } catch (e) {
-      throw new Error('Activity Update Failed');
     }
     if (!task) throw new Error('Task not found!');
     return task;

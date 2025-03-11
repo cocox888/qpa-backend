@@ -21,6 +21,7 @@ require('./utils/storageSetup.js');
 require('dotenv').config();
 
 const app = express();
+const path = require('path');
 const PORT = process.env.PORT;
 
 // const whiteList = ['https://mysite.com','http://localhost:4000', 'http://localhost:3000'];
@@ -55,6 +56,13 @@ app.get('/api/example', (req, res) => {
 
 app.use(auth);
 app.use('/', uploadRouter);
+
+app.use(
+  '/reports',
+  // roleVerify('admin'),
+  express.static(path.join(__dirname, 'reports'))
+);
+
 //Authenticated User Access
 app.use(handleVerify);
 

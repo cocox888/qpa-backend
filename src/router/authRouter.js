@@ -18,6 +18,7 @@ const { upload } = require('../services/UploadService.js');
 const roleVerify = require('../middleware/roleVerify.js');
 const TimeTrackController = require('../controller/TimeTrackController');
 const DownloadController = require('../controller/DownloadController');
+const ReportController = require('../controller/ReportController');
 
 router.post('/register/user', validateUser, UserController.signup);
 
@@ -28,6 +29,8 @@ router.post(
   roleVerify('admin'),
   ClientController.createClient
 );
+
+router.get('/newreport', ReportController.generateReport);
 
 router.post('/login', LoginController.login);
 router.post('/logout', handleSignout);

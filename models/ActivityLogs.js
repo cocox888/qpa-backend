@@ -26,15 +26,19 @@ const ActivityLogs = sequelize.define(
     },
 
     project_name: {
-      type: DataTypes.STRING, // Changed from INTEGER to STRING
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    createdby: {
+      type: DataTypes.STRING,
       allowNull: true
     },
     user_name: {
-      type: DataTypes.STRING, // Changed from INTEGER to STRING
+      type: DataTypes.STRING,
       allowNull: true
     },
     task_name: {
-      type: DataTypes.STRING, // Changed from INTEGER to STRING
+      type: DataTypes.STRING,
       allowNull: true
     },
     activity_description: {
@@ -47,7 +51,7 @@ const ActivityLogs = sequelize.define(
     modelName: 'ActivityLogs',
     tableName: 'activity_logs',
     underscored: true,
-    timestamps: true // Enables createdAt & updatedAt fields
+    timestamps: true
   }
 );
 
