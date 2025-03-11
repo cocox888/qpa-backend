@@ -10,6 +10,7 @@ const {
 } = require('../../utils/Time.cjs');
 const {
   getPhaseForSMM,
+  getPhaseForWDS,
   getPhaseStringForProject
 } = require('../../utils/ProjectUtils.cjs');
 const ActivityLogs = require('../../models/ActivityLogs');
@@ -265,14 +266,6 @@ class ProjectService {
           model: ActivityLogs,
           as: 'projectHasLogs'
         }
-        // {
-        //   model: Tag,
-        //   as: 'assignedProjectTag',
-        //   attributes: ['id', 'title']
-        //   // through: {
-        //   //   attributes: [],
-        //   // },
-        // }
       ]
     });
     if (!project) throw new Error('Project not found!');
@@ -440,11 +433,15 @@ class ProjectService {
   }
   async updateProjectPhase(data) {
     const { projectId, phase } = data;
+    console.log(projectId, phase);
 
     const project = await Project.findByPk(projectId);
     if (!project) throw new Error('Project not found!');
-    const phaseString = getPhaseForSMM(phase);
+    let phaseString = '';
+    if (project.package_type === 'smm') phaseString = getPhaseForSMM(phase);
+    if (project.package_type === 'wds') phaseString = getPhaseForWDS(phase);
     project.update({ project_phase: phaseString });
+
     return phase;
   }
 }

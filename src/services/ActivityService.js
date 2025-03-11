@@ -56,6 +56,7 @@ class ActivityService {
       throw new Error(e);
     }
   }
+
   async getAllActivityLogsForUser(data) {
     try {
       const {

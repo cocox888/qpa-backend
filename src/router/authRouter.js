@@ -18,27 +18,10 @@ const { upload } = require('../services/UploadService.js');
 const roleVerify = require('../middleware/roleVerify.js');
 const TimeTrackController = require('../controller/TimeTrackController');
 const DownloadController = require('../controller/DownloadController');
+const ReportController = require('../controller/ReportController');
 
-// app.post('/upload-avatar', upload.single('avatar'), (req, res) => {
-//   if (!req.file) {
-//     return res.status(400).json({ message: 'No file uploaded' });
-//   }
-//   res.json({
-//     message: 'File uploaded successfully',
-//     filePath: `/uploads/${req.file.filename}`
-//   });
-// });
+router.post('/register/user', validateUser, UserController.signup);
 
-// app.use('/uploads', express.static('uploads'));
-
-router.post(
-  '/register/user',
-  validateUser,
-  // roleVerify('admin'),
-  UserController.signup
-);
-
-// router.post("/register/confclient", UacPermission("edit_tasks"), ClientController.confClient)
 router.post('/register/confclient', ClientController.confClient);
 router.post(
   '/register/client',
@@ -47,9 +30,10 @@ router.post(
   ClientController.createClient
 );
 
+router.get('/newreport', ReportController.generateReport);
+
 router.post('/login', LoginController.login);
 router.post('/logout', handleSignout);
-//Refresh token
 router.post('/refresh', handleRef);
 
 router.post('/setTimeTrack', TimeTrackController.createTimeTrack);

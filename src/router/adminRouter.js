@@ -12,6 +12,7 @@ const TimeTrackController = require('../controller/TimeTrackController');
 const KanbanController = require('../controller/KanbanController');
 const DownloadController = require('../controller/DownloadController');
 const ActivityController = require('../controller/ActivityController');
+const ReportController = require('../controller/ReportController');
 
 //Router for project CRUD action.
 router.post('/', async (req, res) => {
@@ -59,19 +60,14 @@ router.post('/getTimeDataForProject', ProjectController.getTimeData);
 // Time Track Route
 router.get('/getAllTimeTracks', TimeTrackController.getAllTimeTracksForPeriod);
 
-/**
- * Project Management
- */
 router.post('/updateProjectPhase', ProjectController.updateProjectPhase);
-/**
- * All Activity Logs
- */
+
 router.post('/allActivityLogs', ActivityController.getAllActivityLogs);
 
-router.get(
-  '/allTasks',
-  // UacPermission('edit_task', 'delete_tasks'),
-  TaskController.getAllTasks
-);
+router.get('/allTasks', TaskController.getAllTasks);
+
+router.post('/newreport', ReportController.generateReport);
+router.post('/sendReport', ReportController.sendReport);
+router.get('/getAllReports', ReportController.getAllReports);
 
 module.exports = router;

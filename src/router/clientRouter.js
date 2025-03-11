@@ -9,6 +9,7 @@ const TaskController = require('../controller/TaskController');
 
 const DownloadController = require('../controller/DownloadController');
 const ActivityController = require('../controller/ActivityController');
+const ReportController = require('../controller/ReportController');
 
 //Router for project CRUD action.
 router.post('/', async (req, res) => {
@@ -22,6 +23,8 @@ router.post(
   UacPermission('edit_task', 'delete_tasks'),
   ProjectController.getProjectById
 );
+
+router.get('/getAllReports', ReportController.getAllReportsForClient);
 
 /**
  * Download File Data

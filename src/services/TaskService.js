@@ -12,10 +12,6 @@ const Activity = require('../../models/ActivityLogs');
 const ActivityLogs = require('../../models/ActivityLogs');
 
 class TaskService {
-  //Create Task
-  //Fundatmentally this role is only for admin and task manager.
-  //To create Task we need client name, user name
-  //Create the association between task and client and user
   async createTask(req) {
     const {
       title,
@@ -52,9 +48,6 @@ class TaskService {
     await task.setTaskClient(project.projectClient);
     await task.setTaskProject(project);
     await task.setAssignedTaskUser(req.members);
-    //////////////////////////
-    // Total Time Update    //
-    //////////////////////////
 
     if (isTimestampToday(task.createdAt)) {
       try {
@@ -83,24 +76,6 @@ class TaskService {
       } catch (e) {
         throw new Error('Project Update Failed');
       }
-    }
-
-    //////////////////////////
-    // Activity Update      //
-    //////////////////////////
-    try {
-      const activity = await ActivityLogs.create({
-        project_name: project.title,
-        user_name: user_name,
-        task_name: task.title,
-        project_type: project.package_type,
-        action_type: 'Create',
-        activity_description: '',
-        project_id: project.id,
-        log_hour: estimated_time
-      });
-    } catch (e) {
-      throw new Error('Activity Update Failed');
     }
 
     if (req.tags && req.tags.length > 0) {
@@ -460,20 +435,19 @@ class TaskService {
         throw new Error('Project Update Failed');
       }
     }
-
-    try {
+    for (const user of upusers) {
       const activity = await ActivityLogs.create({
         project_name: project.title,
-        user_name: data.user_name,
+        createdby: user_name,
+        user_name: user.name,
         task_name: task.title,
         project_type: project.package_type,
         action_type: 'Update',
-        activity_description: '',
-        project_id: project.id,
+        project_id: project.id, // Link activity to the project
+        user_id: user.id,
+        activity_description: `${user.name} was assigned to the task`,
         log_hour: data.estimated_time
       });
-    } catch (e) {
-      throw new Error('Activity Update Failed');
     }
     if (!task) throw new Error('Task not found!');
     return task;
