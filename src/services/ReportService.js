@@ -48,9 +48,7 @@ function generateCustomerInformation(doc, invoice) {
     .text(invoice.month, 150, customerInformationTop + 30)
     .text(
       invoice.bookedHours
-        ? `${Math.floor(invoice.bookedHours / 60)} hours ${
-            invoice.bookedHours % 60
-          } minutes`
+        ? `${Math.floor(invoice.bookedHours)} hours`
         : '',
       150,
       customerInformationTop + 45

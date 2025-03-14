@@ -100,5 +100,5 @@ app.use('/member', roleVerify('member'), vaRouter);
 app.use('/client', roleVerify('client'), clientRouter);
 
 app.listen(PORT, () => {
-  //console.log("The server is running at localhost:" + PORT);
+  console.log("The server is running at localhost:" + PORT);
 });

@@ -287,6 +287,7 @@ class StripeController {
       // Create a Stripe Checkout session
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
+        payment_method_data:'card',
         customer: invoice.customer,
         line_items: [
           {
