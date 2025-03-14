@@ -28,7 +28,7 @@ const ProjectTimeLine = sequelize.define(
   },
   {
     tableName: 'ProjectTimeLine',
-    timestamps: false
+    timestamps: true
   }
 );
 

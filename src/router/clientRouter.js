@@ -10,6 +10,7 @@ const TaskController = require('../controller/TaskController');
 const DownloadController = require('../controller/DownloadController');
 const ActivityController = require('../controller/ActivityController');
 const ReportController = require('../controller/ReportController');
+const StripeController = require('../controller/StripeController');
 
 //Router for project CRUD action.
 router.post('/', async (req, res) => {
@@ -52,5 +53,14 @@ router.delete(
   '/dashboard/removefavourtask',
   TaskController.removeFavouriteTask
 );
+
+router.get('/getAllInvoice', StripeController.getInvoicesForClient);
+// router.get('/getAllInvoice', StripeController.getInvoices);
+router.post('/pay-invoice', StripeController.payInvoice);
+router.post('/pay-default-invoice', StripeController.payInvoiceWithAttatched);
+
+router.get('/paymentAttatched', StripeController.paymentAttatched);
+router.post('/attach-payment-method', StripeController.attatchpayment);
+router.get('/setup-intent', StripeController.createSetupIntent);
 
 module.exports = router;

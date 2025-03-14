@@ -86,9 +86,9 @@ const Project = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    project_phase:{
-      type:DataTypes.STRING,
-      allowNull:true
+    project_phase: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   },
   {
@@ -143,12 +143,12 @@ User.belongsToMany(Project, {
 Project.belongsTo(Client, {
   foreignKey: 'client_id',
   as: 'projectClient',
-  onDelete: 'CASCADE',
+  onDelete: 'CASCADE'
 });
 
 Client.hasMany(Project, {
   foreignKey: 'client_id',
-  as: 'clientProject',
+  as: 'clientProject'
 });
 
 //Favorite relation between project and client
