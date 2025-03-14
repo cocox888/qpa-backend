@@ -68,29 +68,14 @@ class authClientService {
     const photo = req.file ? req.file.path : '/src/avatars/no-image.jpg';
     // Create and return new client
     try {
-      const stripeAccount = await stripe.accounts.create({
-        country: 'US',
+      const balance = await stripe.balance.retrieve();
+      console.log(balance);
+
+      const stripeAccount = await stripe.customers.create({
         email,
-        controller: {
-          fees: {
-            payer: 'application'
-          },
-          losses: {
-            payments: 'application'
-          },
-          stripe_dashboard: {
-            type: 'express'
-          }
-        }
+        name: full_name
       });
-
-      const accountLink = await stripe.accountLinks.create({
-        account: stripeAccount.id,
-        refresh_url: `${process.env.PUBLIC_URL}/reauth`,
-        return_url: `${process.env.PUBLIC_URL}/dashboard`,
-        type: 'account_onboarding'
-      });
-
+      console.log('Customer created:', stripeAccount.id);
       // await sendEmail({
       //   to: email,
       //   subject: 'Complete Your Stripe Onboarding',
@@ -145,12 +130,8 @@ class authClientService {
         agree_to_terms,
         password,
         stripe_account_id: stripeAccount.id,
-        stripe_account_link: accountLink.url,
         status: req.body.status || 0
       });
-
-      client.setDataValue('accountLink', accountLink.url);
-      client.setDataValue('stripeAccountId', stripeAccount.id);
 
       return client;
     } catch (e) {

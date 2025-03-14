@@ -16,12 +16,12 @@ function generateHeader(doc, data) {
     .moveDown();
 }
 
-function generateFooter(doc, data) {
-  doc.fontSize(10).text(`Total this ${data.revenue}:`, 150, 600, {
-    align: 'left',
-    width: 500
-  });
-}
+// function generateFooter(doc, data) {
+//   doc.fontSize(10).text(`Total this ${data.revenue}:`, 150, 600, {
+//     align: 'left',
+//     width: 500
+//   });
+// }
 
 function generateCustomerInformation(doc, invoice) {
   const customerInformationTop = 110;
@@ -30,24 +30,39 @@ function generateCustomerInformation(doc, invoice) {
 
   doc
     .fontSize(10)
+    .fillColor('darkgreen')
     .font('Helvetica-Bold')
     .text('Project:', 50, customerInformationTop)
     .text('Date:', 50, customerInformationTop + 15)
     .text('Month:', 50, customerInformationTop + 30)
-    .text('Booked Hours', 50, customerInformationTop + 45)
-    .text('Hours Used So Far', 50, customerInformationTop + 60)
-    .text('Package Type', 50, customerInformationTop + 75)
+    .text('Booked Hours:', 50, customerInformationTop + 45)
+    .text('Hours Used So Far:', 50, customerInformationTop + 60)
+    .text('Package Type:', 50, customerInformationTop + 75)
     .font('Helvetica')
     .text(invoice.project, 150, customerInformationTop)
     .text(
-      `${invoice.startDate} - ${invoice.endDate}`,
+      `${invoice.startDate} ~ ${invoice.endDate}`,
       150,
       customerInformationTop + 15
     )
     .text(invoice.month, 150, customerInformationTop + 30)
-    .text(invoice.bookedHours, 150, customerInformationTop + 45)
-    .text(invoice.hourUsed, 150, customerInformationTop + 60)
-    .text(invoice.package_type, 150, customerInformationTop + 75)
+    .text(
+      invoice.bookedHours
+        ? `${Math.floor(invoice.bookedHours / 60)} hours ${
+            invoice.bookedHours % 60
+          } minutes`
+        : '',
+      150,
+      customerInformationTop + 45
+    )
+    .text(
+      `${Math.floor(invoice.hourUsed / 60)} hours ${
+        invoice.hourUsed % 60
+      } minutes`,
+      150,
+      customerInformationTop + 60
+    )
+    .text(invoice.package_type.toUpperCase(), 150, customerInformationTop + 75)
     .moveDown();
 }
 
@@ -101,10 +116,15 @@ function generateHR(doc, y) {
     .lineTo(550, y) // End the line at x=550 and y (horizontal line with length from 50 to 550)
     .stroke(); // Draw the line
 }
-function generateSideNav(doc) {
+function generateSideNav(doc, invoice) {
   doc
     .fillColor('darkgreen') // Set the fill color to dark green
-    .rect(0, 228, 80, 500) // Create a rectangle from x=0 to x=100 and y=230 to y=500
+    .rect(
+      0,
+      228,
+      80,
+      invoice.items.length < 20 ? 650 : 20 * invoice.items.length
+    ) // Create a rectangle from x=0 to x=100 and y=230 to y=500
     .fill(); // Fill the rectangle with the dark green color
 }
 
@@ -130,7 +150,7 @@ const createInvoice = async (invoice, filePath) => {
     generateCustomerInformation(doc, invoice);
 
     generateHR(doc, 228);
-    generateSideNav(doc);
+    generateSideNav(doc, invoice);
 
     generateTableHeader(
       doc,
@@ -142,7 +162,7 @@ const createInvoice = async (invoice, filePath) => {
     );
 
     generateInvoiceTable(doc, invoice);
-    generateFooter(doc, invoice);
+    // generateFooter(doc, invoice);
 
     doc.end();
 

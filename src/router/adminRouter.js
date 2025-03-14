@@ -79,5 +79,9 @@ router.get('/getAllReports', ReportController.getAllReports);
 //Invoice
 router.post('/newInvoice', StripeController.sendInvoice);
 router.get('/getAllInvoice', StripeController.getInvoices);
+router.get(
+  '/getAllInvoiceForProjects',
+  StripeController.getInvoicesForProjects
+);
 
 module.exports = router;
